@@ -10,6 +10,7 @@ django-ckeditor-5>=0.2.12
 
 # Environment Variables
 python-decouple>=3.8
+python-dotenv>=1.0.0
 
 # Image Processing
 Pillow>=10.4
