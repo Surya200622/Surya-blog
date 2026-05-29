@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block content %}
+<section class="section">
+    <div class="container page-enter">
+        <div class="text-center mb-8 animate-on-scroll">
+            <h1>Blog</h1>
+            <p style="font-size: var(--text-lg);">Explore articles on tech, design, and more.</p>
+        </div>
+
+        <!-- Search -->
+        <div class="flex-center mb-8">
+            <form action="{% url 'blog:search' %}" method="get" style="max-width: 500px; width: 100%;" id="blog-search-form">
+                <input type="text" name="q" class="form-input form-input-lg" placeholder="🔍 Search articles..." value="{{ query|default:'' }}" id="blog-search">
+            </form>
+        </div>
+
+        <!-- Categories -->
+        {% if categories %}
+        <div class="flex-center gap-3 mb-8" style="flex-wrap: wrap;">
+            <a href="{% url 'blog:post_list' %}" class="tag {% if not category %}badge-primary{% endif %}">All</a>
+            {% for cat in categories %}
+            <a href="{{ cat.get_absolute_url }}" class="tag">{{ cat.name }}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Posts Grid -->
+        {% if posts %}
+        <div class="grid grid-3 stagger-children">
+            {% for post in posts %}
+            <article class="post-card animate-on-scroll" id="post-{{ post.id }}">
+                {% if post.featured_image %}
+                <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="post-card__image" loading="lazy">
+                {% else %}
+                <div class="post-card__image-placeholder" style="background: {% cycle 'var(--gradient-cool)' 'var(--gradient-warm)' 'var(--gradient-primary)' 'var(--gradient-secondary)' %};">📝</div>
+                {% endif %}
+                <div class="post-card__body">
+                    {% if post.category %}
+                    <span class="post-card__category">{{ post.category.name }}</span>
+                    {% endif %}
+                    {% if post.is_premium %}<span class="badge badge-warning" style="margin-left: var(--space-2);">Premium</span>{% endif %}
+                    <h3 class="post-card__title">
+                        <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                    </h3>
+                    <p class="post-card__excerpt">{{ post.excerpt|truncatewords:20 }}</p>
+                    <div class="post-card__footer">
+                        <div class="post-card__author">
+                            <img src="{{ post.author.avatar_url }}" alt="{{ post.author.username }}" class="avatar avatar-sm">
+                            <span class="text-sm">{{ post.author.username }}</span>
+                        </div>
+                        <div class="post-card__meta">
+                            <span>{{ post.reading_time }} min</span>
+                            <span>{{ post.views_count|intcomma }}</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if posts.has_other_pages %}
+        <div class="pagination">
+            {% if posts.has_previous %}
+            <a href="?page={{ posts.previous_page_number }}">&laquo; Prev</a>
+            {% endif %}
+            {% for num in posts.paginator.page_range %}
+                {% if posts.number == num %}
+                <span class="current">{{ num }}</span>
+                {% elif num > posts.number|add:'-3' and num < posts.number|add:'3' %}
+                <a href="?page={{ num }}">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+            {% if posts.has_next %}
+            <a href="?page={{ posts.next_page_number }}">Next &raquo;</a>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-state__icon">📝</div>
+            <h3 class="empty-state__title">No posts yet</h3>
+            <p class="empty-state__desc">Be the first to publish something amazing!</p>
+            {% if user.is_authenticated %}
+            {% if user.is_superuser %}
+            <a href="{% url 'blog:post_create' %}" class="btn btn-gradient">Create Post</a>
+            {% endif %}
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="section">
+    <div class="container-sm page-enter">
+        <h1 style="margin-bottom: var(--space-8);">{% if is_edit %}Edit Post{% else %}Create Post{% endif %}</h1>
+
+        <form method="post" enctype="multipart/form-data" id="post-form">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label class="form-label" for="post-title">Title</label>
+                {{ form.title }}
+                {% if form.title.errors %}{{ form.title.errors }}{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Content</label>
+                {{ form.content }}
+                {% if form.content.errors %}{{ form.content.errors }}{% endif %}
+            </div>
+
+            <div class="grid grid-2 gap-4">
+                <div class="form-group">
+                    <label class="form-label" for="post-category">Category</label>
+                    {{ form.category }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="post-status">Status</label>
+                    {{ form.status }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="post-tags">Tags</label>
+                {{ form.tags_input }}
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="post-excerpt">Excerpt</label>
+                {{ form.excerpt }}
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="post-image">Featured Image</label>
+                {{ form.featured_image }}
+            </div>
+
+            <div class="flex gap-4 mt-2">
+                <label class="flex gap-2" style="align-items: center; cursor: pointer;">
+                    {{ form.is_premium }}
+                    <span class="text-sm">Premium Content</span>
+                </label>
+                <label class="flex gap-2" style="align-items: center; cursor: pointer;">
+                    {{ form.is_featured }}
+                    <span class="text-sm">Featured Post</span>
+                </label>
+            </div>
+
+            <!-- SEO Section -->
+            <details style="margin-top: var(--space-8);">
+                <summary style="cursor: pointer; font-weight: 600; color: var(--text-secondary); margin-bottom: var(--space-4);">
+                    🔍 SEO Settings
+                </summary>
+                <div class="card-flat" style="padding: var(--space-6); margin-top: var(--space-4);">
+                    <div class="form-group">
+                        <label class="form-label" for="post-meta-title">SEO Title (max 60 chars)</label>
+                        {{ form.meta_title }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="post-meta-desc">SEO Description (max 160 chars)</label>
+                        {{ form.meta_description }}
+                    </div>
+                </div>
+            </details>
+
+            <!-- Project Details Section (For Portfolio) -->
+            <details style="margin-top: var(--space-4);" open>
+                <summary style="cursor: pointer; font-weight: 600; color: var(--text-secondary); margin-bottom: var(--space-4);">
+                    💼 Project Details (Portfolio Only)
+                </summary>
+                <div class="card-flat" style="padding: var(--space-6); margin-top: var(--space-4);">
+                    <div class="form-group">
+                        <label class="form-label" for="project-live-url">Live URL</label>
+                        {{ form.project_live_url }}
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="project-price">Project Price</label>
+                        {{ form.project_price }}
+                    </div>
+                </div>
+            </details>
+
+            <div class="flex gap-4 mt-8">
+                <button type="submit" class="btn btn-gradient btn-lg" id="post-submit">
+                    {% if is_edit %}Update Post{% else %}Publish Post{% endif %} →
+                </button>
+                <a href="{% url 'dashboard:posts' %}" class="btn btn-secondary btn-lg">Cancel</a>
+            </div>
+        </form>
+    </div>
+</section>
+
+{{ form.media }}
+{% endblock %}

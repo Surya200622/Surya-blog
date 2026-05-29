@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block body_class %}page-home{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section" style="background: var(--gradient-hero); min-height: 90vh; display: flex; align-items: center; position: relative; overflow: hidden;">
+    <!-- Decorative orbs -->
+    <div class="animate-float" style="position: absolute; top: 10%; left: 10%; width: 350px; height: 350px; background: radial-gradient(circle, rgba(139, 92, 246, 0.25), transparent 70%); border-radius: 50%; filter: blur(60px); pointer-events: none; mix-blend-mode: screen;"></div>
+    <div class="animate-float" style="position: absolute; bottom: 20%; right: 10%; width: 300px; height: 300px; background: radial-gradient(circle, rgba(236, 72, 153, 0.2), transparent 70%); border-radius: 50%; filter: blur(60px); pointer-events: none; mix-blend-mode: screen; animation-delay: 1.5s;"></div>
+
+    <div class="container" style="position: relative; z-index: 1;">
+        <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+            <div class="animate-on-scroll" style="margin-bottom: var(--space-6);">
+                <span class="badge badge-primary" style="font-size: var(--text-sm); padding: var(--space-2) var(--space-5);">
+                    🚀 Full-Stack Python Developer
+                </span>
+            </div>
+
+            <h1 class="animate-on-scroll" style="font-size: clamp(2.8rem, 7vw, 5.5rem); margin-bottom: var(--space-6); line-height: 1.1; font-weight: 900; letter-spacing: -1px;">
+                I Craft <span class="text-gradient animate-gradient">Digital</span><br>
+                Experiences
+            </h1>
+
+            <p class="animate-on-scroll" style="font-size: var(--text-xl); color: var(--text-secondary); max-width: 600px; margin: 0 auto var(--space-8);">
+                Hi, I'm Surya CS. I specialize in Django and React to build modern, blazing-fast web solutions from Coimbatore, India.
+            </p>
+
+            <div class="animate-on-scroll flex-center gap-4" style="flex-wrap: wrap;">
+                <a href="#portfolio" class="btn btn-gradient btn-lg">
+                    View My Work →
+                </a>
+                <a href="#services" class="btn btn-secondary btn-lg">
+                    My Services
+                </a>
+            </div>
+
+            <!-- Stats bar -->
+            <div class="animate-on-scroll stats-section" style="display: flex; justify-content: center; gap: var(--space-12); margin-top: var(--space-16); flex-wrap: wrap;">
+                <div style="text-align: center;">
+                    <div style="font-family: var(--font-display); font-size: var(--text-3xl); font-weight: 800; color: var(--text-primary);" data-counter="3">0</div>
+                    <div style="font-size: var(--text-sm); color: var(--text-tertiary);">Projects Delivered</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-family: var(--font-display); font-size: var(--text-3xl); font-weight: 800; color: var(--text-primary);" data-counter="10">0</div>
+                    <div style="font-size: var(--text-sm); color: var(--text-tertiary);">Technologies</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-family: var(--font-display); font-size: var(--text-3xl); font-weight: 800; color: var(--text-primary);" data-counter="2">0</div>
+                    <div style="font-size: var(--text-sm); color: var(--text-tertiary);">Certifications</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Portfolio Section -->
+<section id="portfolio" class="section" style="background: var(--bg-secondary);">
+    <div class="container">
+        <div class="text-center mb-8 animate-on-scroll">
+            <span class="badge badge-primary mb-4" style="display: inline-block;">Portfolio</span>
+            <h2>Selected <span class="text-gradient">Works</span></h2>
+            <p style="max-width: 500px; margin: var(--space-3) auto 0;">Recent projects and digital solutions I've built.</p>
+        </div>
+
+        {% if portfolio_posts %}
+        <div class="grid grid-2 stagger-children">
+            {% for post in portfolio_posts %}
+            <article class="post-card animate-on-scroll" style="display: flex; flex-direction: column;">
+                {% if post.featured_image %}
+                <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="post-card__image" loading="lazy" style="height: 250px; object-fit: cover;">
+                {% else %}
+                <div class="post-card__image-placeholder" style="height: 250px; background: {% cycle 'var(--gradient-cool)' 'var(--gradient-warm)' 'var(--gradient-primary)' %};">💻</div>
+                {% endif %}
+                <div class="post-card__body" style="flex: 1; display: flex; flex-direction: column;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-2); margin-bottom: var(--space-2);">
+                        <h3 class="post-card__title" style="font-size: var(--text-2xl); margin: 0;">
+                            <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                        </h3>
+                        {% if post.project_price %}
+                        <span class="badge" style="background: var(--accent); color: white; white-space: nowrap;">{{ post.project_price }}</span>
+                        {% endif %}
+                    </div>
+                    <p class="post-card__excerpt" style="flex: 1;">{{ post.excerpt }}</p>
+                    <div class="mt-4 flex gap-2" style="flex-wrap: wrap;">
+                        {% for tag in post.tags.all %}
+                        <span class="tag">{{ tag.name }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="mt-4 flex gap-2" style="margin-top: var(--space-4);">
+                        <a href="{{ post.get_absolute_url }}" class="btn btn-secondary btn-sm" style="flex: 1; justify-content: center;">Details</a>
+                        {% if post.project_live_url %}
+                        <a href="{{ post.project_live_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm" style="flex: 1; justify-content: center;">Live Site ↗</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <h3 class="empty-state__title">Projects loading...</h3>
+            <p class="empty-state__desc">Run the population script to see portfolio items here.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Services / Offers Section -->
+<section id="services" class="section">
+    <div class="container">
+        <div class="text-center mb-8 animate-on-scroll">
+            <span class="badge badge-primary mb-4" style="display: inline-block;">Services</span>
+            <h2>Project Budget <span class="text-gradient">Calculator</span></h2>
+            <p style="max-width: 500px; margin: var(--space-3) auto 0;">Professional web development packages tailored to your needs.</p>
+        </div>
+
+        {% if plans %}
+        <div class="grid grid-3 stagger-children" style="max-width: 1000px; margin: 0 auto;">
+            {% for plan in plans %}
+            <div class="pricing-card animate-on-scroll {% if plan.is_popular %}popular{% endif %}" style="display: flex; flex-direction: column;">
+                <h3 class="pricing-card__name">{{ plan.name }}</h3>
+                <p class="text-muted text-sm mb-6 flex-1">{{ plan.description }}</p>
+                <div class="pricing-card__price">
+                    ₹{{ plan.price|floatformat:0 }}
+                </div>
+                
+                <ul class="pricing-card__features" style="flex: 1;">
+                    {% for feature in plan.features %}
+                    <li>{{ feature }}</li>
+                    {% endfor %}
+                </ul>
+
+                {% if user.is_authenticated %}
+                <a href="{% url 'payments:checkout' slug=plan.slug %}" class="btn {% if plan.is_popular %}btn-gradient{% else %}btn-secondary{% endif %} btn-lg w-full mt-6">
+                    Order Now
+                </a>
+                {% else %}
+                <a href="{% url 'accounts:register' %}?next={% url 'payments:checkout' slug=plan.slug %}" class="btn {% if plan.is_popular %}btn-gradient{% else %}btn-secondary{% endif %} btn-lg w-full mt-6">
+                    Login to Order
+                </a>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <h3 class="empty-state__title">Services loading...</h3>
+            <p class="empty-state__desc">Run the population script to see offers here.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Latest Articles (Blog) -->
+{% if latest_posts %}
+<section class="section" style="background: var(--bg-secondary);">
+    <div class="container">
+        <div class="flex-between mb-8 animate-on-scroll" style="flex-wrap: wrap; gap: var(--space-4);">
+            <div>
+                <h2>Technical <span class="text-gradient">Blog</span></h2>
+                <p class="text-muted mt-2">Insights on Python, Django, React and more</p>
+            </div>
+            <a href="{% url 'blog:post_list' %}" class="btn btn-secondary">
+                View All Articles →
+            </a>
+        </div>
+
+        <div class="grid grid-3 stagger-children">
+            {% for post in latest_posts %}
+            <article class="post-card animate-on-scroll">
+                {% if post.featured_image %}
+                <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="post-card__image" loading="lazy">
+                {% else %}
+                <div class="post-card__image-placeholder" style="background: {% cycle 'var(--gradient-cool)' 'var(--gradient-warm)' 'var(--gradient-primary)' %};">📄</div>
+                {% endif %}
+                <div class="post-card__body">
+                    {% if post.category %}
+                    <span class="post-card__category">{{ post.category.name }}</span>
+                    {% endif %}
+                    <h3 class="post-card__title">
+                        <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+                    </h3>
+                    <p class="post-card__excerpt">{{ post.excerpt|truncatewords:20 }}</p>
+                    <div class="post-card__footer">
+                        <div class="post-card__meta">
+                            <span>{{ post.created_at|date:"M d, Y" }}</span>
+                            <span>{{ post.reading_time }} min read</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- CTA Section -->
+<section class="section" style="position: relative; overflow: hidden;">
+    <div style="position: absolute; inset: 0; background: var(--gradient-cool); opacity: 0.1;"></div>
+    <div class="container" style="position: relative; z-index: 1;">
+        <div class="text-center animate-on-scroll" style="max-width: 600px; margin: 0 auto;">
+            <h2 style="margin-bottom: var(--space-4); font-size: clamp(2rem, 5vw, 3.5rem);">Let's Build Something <span class="text-gradient animate-gradient">Amazing</span></h2>
+            <p style="color: var(--text-secondary); margin-bottom: var(--space-8); font-size: var(--text-lg);">
+                Ready to start your project? Get in touch and let's make it happen. Or hire me directly through the client portal.
+            </p>
+            <div class="flex-center gap-4" style="flex-wrap: wrap;">
+                <a href="{% url 'pages:contact' %}" class="btn btn-gradient btn-lg">
+                    Contact Me
+                </a>
+                <a href="{% url 'freelance:project_list' %}" class="btn btn-secondary btn-lg">
+                    Post a Custom Request
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

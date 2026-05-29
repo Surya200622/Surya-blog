@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="section">
+    <div class="container-sm page-enter">
+        <h1 style="margin-bottom: var(--space-8);">Post a Project</h1>
+        <form method="post" enctype="multipart/form-data" id="project-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label class="form-label">Project Title</label>
+                {{ form.title }}
+                {% if form.title.errors %}{{ form.title.errors }}{% endif %}
+            </div>
+            <div class="form-group">
+                <label class="form-label">Description</label>
+                {{ form.description }}
+            </div>
+            <div class="grid grid-2 gap-4">
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    {{ form.category }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Budget Type</label>
+                    {{ form.budget_type }}
+                </div>
+            </div>
+            <div class="grid grid-2 gap-4">
+                <div class="form-group">
+                    <label class="form-label">Min Budget (₹)</label>
+                    {{ form.budget_min }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Max Budget (₹)</label>
+                    {{ form.budget_max }}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Required Skills</label>
+                {{ form.skills_input }}
+            </div>
+            <div class="grid grid-2 gap-4">
+                <div class="form-group">
+                    <label class="form-label">Deadline</label>
+                    {{ form.deadline }}
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Attachment</label>
+                    {{ form.attachment }}
+                </div>
+            </div>
+            <button type="submit" class="btn btn-gradient btn-lg mt-4" id="post-project-submit">Post Project 🚀</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

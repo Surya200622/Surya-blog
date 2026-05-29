@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="section">
+    <div class="container page-enter">
+        <h1 style="margin-bottom: var(--space-6);">
+            Search: <span class="text-gradient">"{{ query }}"</span>
+        </h1>
+        <p class="text-muted mb-8">{{ results_count }} result{{ results_count|pluralize }} found</p>
+
+        {% if posts %}
+        <div class="grid grid-3 stagger-children">
+            {% for post in posts %}
+            <article class="post-card animate-on-scroll">
+                {% if post.featured_image %}
+                <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="post-card__image" loading="lazy">
+                {% else %}
+                <div class="post-card__image-placeholder">📝</div>
+                {% endif %}
+                <div class="post-card__body">
+                    {% if post.category %}<span class="post-card__category">{{ post.category.name }}</span>{% endif %}
+                    <h3 class="post-card__title"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
+                    <p class="post-card__excerpt">{{ post.excerpt|truncatewords:20 }}</p>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-state__icon">🔍</div>
+            <h3 class="empty-state__title">No results found</h3>
+            <p class="empty-state__desc">Try different keywords or browse all posts.</p>
+            <a href="{% url 'blog:post_list' %}" class="btn btn-secondary">Browse All Posts</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

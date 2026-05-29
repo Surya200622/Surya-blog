@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="section">
+    <div class="container page-enter">
+        <div class="text-center mb-8 animate-on-scroll">
+            <span class="badge badge-primary mb-4" style="display: inline-block;">💎 My Services</span>
+            <h1>Invest in Your <span class="text-gradient">Digital Future</span></h1>
+            <p style="font-size: var(--text-lg); color: var(--text-secondary); max-width: 500px; margin: var(--space-3) auto 0;">
+                Professional web development packages tailored to your needs. Pick a plan to get started.
+            </p>
+        </div>
+
+        <div class="grid grid-3 stagger-children" style="max-width: 1000px; margin: 0 auto;">
+            {% for plan in plans %}
+            <div class="pricing-card animate-on-scroll {% if plan.is_popular %}popular{% endif %}" id="plan-{{ plan.slug }}">
+                <h3 class="pricing-card__name">{{ plan.name }}</h3>
+                <p class="text-muted text-sm mb-6">{{ plan.description }}</p>
+                <div class="pricing-card__price">
+                    ₹{{ plan.price|floatformat:0 }} <span>/{{ plan.duration_days }} days</span>
+                </div>
+
+                <ul class="pricing-card__features">
+                    {% for feature in plan.features %}
+                    <li>{{ feature }}</li>
+                    {% endfor %}
+                </ul>
+
+                {% if user.is_authenticated %}
+                <a href="{% url 'payments:checkout' slug=plan.slug %}" class="btn {% if plan.is_popular %}btn-gradient{% else %}btn-secondary{% endif %} btn-lg w-full" id="select-{{ plan.slug }}">
+                    Get Started
+                </a>
+                {% else %}
+                <a href="{% url 'accounts:register' %}" class="btn {% if plan.is_popular %}btn-gradient{% else %}btn-secondary{% endif %} btn-lg w-full">
+                    Sign Up to Subscribe
+                </a>
+                {% endif %}
+            </div>
+            {% empty %}
+            <div class="text-center" style="grid-column: 1 / -1;">
+                <p class="text-muted">No plans available yet. Check back soon!</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

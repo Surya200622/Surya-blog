@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="section">
+    <div class="container-sm page-enter">
+        <div class="text-center mb-8">
+            <h1>About <span class="text-gradient">BlogCraft</span></h1>
+            <p style="font-size: var(--text-lg); max-width: 600px; margin: var(--space-4) auto 0;">
+                We're building the future of content creation and freelancing — one post at a time.
+            </p>
+        </div>
+
+        <div class="card-glass" style="padding: var(--space-10);">
+            <h3 style="margin-bottom: var(--space-4);">Our Mission</h3>
+            <p>BlogCraft is a premium platform that brings together writers, developers, designers, and clients in one beautiful space. Whether you're sharing knowledge through blog posts or building your freelance career, we provide the tools you need to succeed.</p>
+
+            <h3 style="margin-top: var(--space-8); margin-bottom: var(--space-4);">What We Offer</h3>
+            <div class="grid grid-2 gap-6" style="margin-top: var(--space-6);">
+                <div class="card animate-on-scroll">
+                    <div style="font-size: var(--text-3xl); margin-bottom: var(--space-3);">📝</div>
+                    <h4>Blog CMS</h4>
+                    <p class="text-sm mt-2">A powerful, rich-text editor for creating stunning blog posts with SEO optimization built-in.</p>
+                </div>
+                <div class="card animate-on-scroll">
+                    <div style="font-size: var(--text-3xl); margin-bottom: var(--space-3);">💼</div>
+                    <h4>Freelance Marketplace</h4>
+                    <p class="text-sm mt-2">Post projects, submit bids, manage milestones, and get paid securely through Razorpay.</p>
+                </div>
+                <div class="card animate-on-scroll">
+                    <div style="font-size: var(--text-3xl); margin-bottom: var(--space-3);">📊</div>
+                    <h4>Analytics Dashboard</h4>
+                    <p class="text-sm mt-2">Track your content performance, earnings, and engagement with a beautiful analytics panel.</p>
+                </div>
+                <div class="card animate-on-scroll">
+                    <div style="font-size: var(--text-3xl); margin-bottom: var(--space-3);">🔒</div>
+                    <h4>Enterprise Security</h4>
+                    <p class="text-sm mt-2">Built with Django's battle-tested security, brute-force protection, and encrypted payments.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

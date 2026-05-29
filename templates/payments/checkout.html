@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_head %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+{% endblock %}
+
+{% block content %}
+<section style="min-height: 80vh; display: flex; align-items: center;">
+    <div class="container-sm page-enter">
+        <div class="card-glass" style="max-width: 520px; margin: 0 auto; padding: var(--space-10);">
+            <div class="text-center mb-8">
+                <h1 style="font-size: var(--text-3xl);">Checkout</h1>
+                <p class="text-muted mt-2">Complete your payment securely with Razorpay</p>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="card-flat" style="padding: var(--space-6); margin-bottom: var(--space-8);">
+                <h4 style="margin-bottom: var(--space-4);">Order Summary</h4>
+                <div class="flex-between" style="padding: var(--space-3) 0; border-bottom: 1px solid var(--border-subtle);">
+                    <span>Plan</span>
+                    <strong>{{ plan.name }}</strong>
+                </div>
+                <div class="flex-between" style="padding: var(--space-3) 0; border-bottom: 1px solid var(--border-subtle);">
+                    <span>Duration</span>
+                    <span>{{ plan.duration_days }} days</span>
+                </div>
+                <div class="flex-between" style="padding: var(--space-3) 0;">
+                    <span style="font-weight: 700; font-size: var(--text-lg);">Total</span>
+                    <span style="font-weight: 700; font-size: var(--text-lg); color: var(--accent-light);">₹{{ plan.price|floatformat:0 }}</span>
+                </div>
+            </div>
+
+            <!-- Payment Methods Info -->
+            <div class="flex gap-4 mb-6" style="justify-content: center; flex-wrap: wrap;">
+                <span class="tag">💳 Card</span>
+                <span class="tag">📱 UPI</span>
+                <span class="tag">🏦 Net Banking</span>
+                <span class="tag">📲 Wallets</span>
+            </div>
+
+            <button onclick="initPayment('{{ plan.slug }}')" class="btn btn-gradient btn-lg w-full" id="pay-btn">
+                💳 Pay ₹{{ plan.price|floatformat:0 }} Now
+            </button>
+
+            <p class="text-center text-xs text-muted mt-4">
+                🔒 Secured by Razorpay. Your payment info is encrypted.
+            </p>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/payments.js' %}"></script>
+{% endblock %}

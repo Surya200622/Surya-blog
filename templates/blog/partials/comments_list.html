@@ -1,0 +1,16 @@
+{% for comment in comments %}
+<div class="card-flat" style="padding: var(--space-5); margin-bottom: var(--space-4);" id="comment-{{ comment.id }}">
+    <div class="flex gap-3" style="align-items: flex-start;">
+        <img src="{{ comment.author.avatar_url }}" alt="{{ comment.author.username }}" class="avatar avatar-sm">
+        <div style="flex: 1;">
+            <div class="flex-between">
+                <strong style="font-size: var(--text-sm);">{{ comment.author.username }}</strong>
+                <span class="text-xs text-muted">{{ comment.created_at|timesince }} ago</span>
+            </div>
+            <p style="margin-top: var(--space-2); font-size: var(--text-sm); color: var(--text-secondary);">{{ comment.content }}</p>
+        </div>
+    </div>
+</div>
+{% empty %}
+<p class="text-muted text-center">No comments yet. Be the first!</p>
+{% endfor %}

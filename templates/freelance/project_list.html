@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block content %}
+<section class="section">
+    <div class="container page-enter">
+        <div class="flex-between mb-8" style="flex-wrap: wrap; gap: var(--space-4);">
+            <div>
+                <h1>Find <span class="text-gradient">Projects</span></h1>
+                <p class="text-muted mt-2">Browse open freelance projects and start earning</p>
+            </div>
+            {% if user.is_authenticated %}
+            {% if user.is_superuser %}
+            <a href="{% url 'freelance:project_create' %}" class="btn btn-gradient">➕ Post a Project</a>
+            {% endif %}
+            {% endif %}
+        </div>
+
+        <!-- Filters -->
+        <div class="flex gap-3 mb-8" style="flex-wrap: wrap;">
+            <a href="{% url 'freelance:project_list' %}" class="tag {% if not request.GET.category %}badge-primary{% endif %}">All</a>
+            {% for cat in categories %}
+            <a href="?category={{ cat.slug }}" class="tag {% if request.GET.category == cat.slug %}badge-primary{% endif %}">{{ cat.name }}</a>
+            {% endfor %}
+        </div>
+
+        {% if projects %}
+        <div class="grid grid-3 stagger-children">
+            {% for project in projects %}
+            <div class="card animate-on-scroll" id="project-{{ project.id }}">
+                <div class="flex-between mb-4">
+                    <span class="badge {% if project.status == 'open' %}badge-success{% else %}badge-warning{% endif %}">{{ project.get_status_display }}</span>
+                    <span class="text-xs text-muted">{{ project.created_at|timesince }} ago</span>
+                </div>
+                <h3 style="font-size: var(--text-lg); margin-bottom: var(--space-3);">
+                    <a href="{{ project.get_absolute_url }}" style="color: var(--text-primary);">{{ project.title }}</a>
+                </h3>
+                <p class="text-sm text-muted mb-4">{{ project.description|truncatewords:25 }}</p>
+
+                {% if project.skills_required %}
+                <div class="flex gap-2 mb-4" style="flex-wrap: wrap;">
+                    {% for skill in project.skills_required|slice:":4" %}
+                    <span class="tag">{{ skill }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <div class="flex-between" style="padding-top: var(--space-4); border-top: 1px solid var(--border-subtle);">
+                    <div>
+                        <span style="font-weight: 700; color: var(--accent-light);">{{ project.budget_display }}</span>
+                        <span class="text-xs text-muted ml-auto">{{ project.get_budget_type_display }}</span>
+                    </div>
+                    <span class="text-sm text-muted">{{ project.bid_count }} bids</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-state__icon">💼</div>
+            <h3 class="empty-state__title">No open projects</h3>
+            <p class="empty-state__desc">Check back soon or post your own project!</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

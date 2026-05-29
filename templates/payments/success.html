@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section style="min-height: 80vh; display: flex; align-items: center;">
+    <div class="container-sm page-enter text-center">
+        <div style="font-size: 5rem; margin-bottom: var(--space-6); animation: bounceIn 0.6s ease-out;">✅</div>
+        <h1 style="color: var(--success);">Payment Successful!</h1>
+        <p style="font-size: var(--text-lg); color: var(--text-secondary); margin: var(--space-4) auto var(--space-8); max-width: 500px;">
+            Thank you for your purchase. Your subscription is now active.
+        </p>
+
+        <div class="card-glass" style="max-width: 400px; margin: 0 auto var(--space-8); padding: var(--space-6);">
+            <div class="flex-between" style="padding: var(--space-2) 0;"><span class="text-muted">Order ID</span><span class="text-sm" style="font-family: var(--font-mono);">{{ order.order_id|truncatechars:16 }}</span></div>
+            <div class="flex-between" style="padding: var(--space-2) 0;"><span class="text-muted">Amount</span><strong>₹{{ order.amount }}</strong></div>
+            {% if payment %}<div class="flex-between" style="padding: var(--space-2) 0;"><span class="text-muted">Method</span><span>{{ payment.method|default:"Online" }}</span></div>{% endif %}
+            <div class="flex-between" style="padding: var(--space-2) 0;"><span class="text-muted">Status</span><span class="badge badge-success">Paid</span></div>
+        </div>
+
+        <div class="flex-center gap-4">
+            <a href="{% url 'dashboard:home' %}" class="btn btn-gradient btn-lg">Go to Dashboard</a>
+            <a href="{% url 'blog:post_list' %}" class="btn btn-secondary btn-lg">Browse Blog</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

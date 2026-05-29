@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="section">
+    <div class="container page-enter">
+        <div class="text-center mb-8">
+            <span class="badge badge-primary mb-4" style="display: inline-block;">📈 Analytics</span>
+            <h1>Performance Analytics</h1>
+            <p class="text-muted mt-2">Track how your content is performing</p>
+        </div>
+
+        {% if top_posts %}
+        <div class="card" style="padding: var(--space-8); margin-bottom: var(--space-8);">
+            <h3 style="margin-bottom: var(--space-6);">Top Performing Posts</h3>
+            <div class="table-container">
+                <table class="table">
+                    <thead><tr><th>#</th><th>Title</th><th>Views</th><th>Reading Time</th></tr></thead>
+                    <tbody>
+                        {% for post in top_posts %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td><a href="{{ post.get_absolute_url }}" style="color: var(--text-primary); font-weight: 600;">{{ post.title }}</a></td>
+                            <td>{{ post.views_count }}</td>
+                            <td>{{ post.reading_time }} min</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-state__icon">📊</div>
+            <h3 class="empty-state__title">No analytics data yet</h3>
+            <p class="empty-state__desc">Start publishing posts to see your analytics.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

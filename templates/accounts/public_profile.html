@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="section">
+    <div class="container page-enter">
+        <div style="max-width: 600px; margin: 0 auto; text-align: center;">
+            <img src="{{ profile_user.avatar_url }}" alt="{{ profile_user.username }}" class="avatar-xxl" style="margin: 0 auto var(--space-6);">
+            <h1>{{ profile_user.get_full_name|default:profile_user.username }}</h1>
+            <p class="text-muted">@{{ profile_user.username }} · {{ profile_user.get_role_display }}</p>
+
+            {% if profile.headline %}
+            <p style="font-size: var(--text-lg); margin-top: var(--space-3);">{{ profile.headline }}</p>
+            {% endif %}
+
+            {% if profile_user.bio %}
+            <p class="mt-4 text-muted">{{ profile_user.bio }}</p>
+            {% endif %}
+
+            <div class="flex-center gap-6 mt-6 mb-8" style="flex-wrap: wrap;">
+                {% if profile.location %}<span class="tag">📍 {{ profile.location }}</span>{% endif %}
+                {% if profile.rating %}<span class="tag">⭐ {{ profile.rating }}/5</span>{% endif %}
+                {% if profile.hourly_rate %}<span class="tag">💰 ₹{{ profile.hourly_rate }}/hr</span>{% endif %}
+                {% if profile.is_available %}<span class="badge badge-success">Available for Hire</span>{% endif %}
+            </div>
+        </div>
+
+        {% if recent_posts %}
+        <div style="margin-top: var(--space-12);">
+            <h3 class="text-center mb-6">Recent Posts</h3>
+            <div class="grid grid-3">
+                {% for post in recent_posts %}
+                <article class="post-card">
+                    {% if post.featured_image %}
+                    <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" class="post-card__image">
+                    {% else %}
+                    <div class="post-card__image-placeholder">📝</div>
+                    {% endif %}
+                    <div class="post-card__body">
+                        <h4 class="post-card__title"><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h4>
+                        <p class="post-card__excerpt">{{ post.excerpt|truncatewords:15 }}</p>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

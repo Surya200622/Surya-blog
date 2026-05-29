@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="section">
+    <div class="container page-enter">
+        <h1 style="margin-bottom: var(--space-6);">My Projects</h1>
+
+        <div class="flex gap-3 mb-8">
+            <a href="?role=client" class="btn {% if role == 'client' %}btn-primary{% else %}btn-secondary{% endif %} btn-sm">As Client</a>
+            <a href="?role=freelancer" class="btn {% if role == 'freelancer' %}btn-primary{% else %}btn-secondary{% endif %} btn-sm">As Freelancer</a>
+        </div>
+
+        {% if projects %}
+        <div class="grid grid-3 stagger-children">
+            {% for project in projects %}
+            <div class="card animate-on-scroll">
+                <span class="badge {% if project.status == 'open' %}badge-success{% elif project.status == 'in_progress' %}badge-warning{% elif project.status == 'completed' %}badge-info{% else %}badge-danger{% endif %} mb-4">
+                    {{ project.get_status_display }}
+                </span>
+                <h3 style="font-size: var(--text-lg); margin-bottom: var(--space-3);">
+                    <a href="{{ project.get_absolute_url }}" style="color: var(--text-primary);">{{ project.title }}</a>
+                </h3>
+                <p class="text-sm text-muted mb-4">{{ project.description|truncatewords:20 }}</p>
+                <div class="flex-between">
+                    <strong style="color: var(--accent-light);">{{ project.budget_display }}</strong>
+                    <span class="text-sm text-muted">{{ project.bid_count }} bids</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-state__icon">💼</div>
+            <h3 class="empty-state__title">No projects yet</h3>
+            <div class="flex-center gap-4 mt-6">
+                {% if user.is_superuser %}
+                <a href="{% url 'freelance:project_create' %}" class="btn btn-gradient">Post a Project</a>
+                {% endif %}
+                <a href="{% url 'freelance:project_list' %}" class="btn btn-secondary">Browse Projects</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block content %}
+<section class="section">
+    <div class="container page-enter">
+        <div class="grid" style="grid-template-columns: 2fr 1fr; gap: var(--space-8);">
+            <!-- Main -->
+            <div>
+                <div class="flex-between mb-4">
+                    <span class="badge {% if project.status == 'open' %}badge-success{% elif project.status == 'in_progress' %}badge-warning{% else %}badge-info{% endif %}">
+                        {{ project.get_status_display }}
+                    </span>
+                    <span class="text-sm text-muted">Posted {{ project.created_at|timesince }} ago</span>
+                </div>
+
+                <h1 style="margin-bottom: var(--space-4);">{{ project.title }}</h1>
+
+                <div class="card-flat" style="padding: var(--space-6); margin-bottom: var(--space-8);">
+                    <h4 style="margin-bottom: var(--space-4);">Description</h4>
+                    <div style="line-height: 1.8; color: var(--text-secondary);">{{ project.description|linebreaks }}</div>
+                </div>
+
+                {% if project.skills_required %}
+                <div class="mb-6">
+                    <h4 style="margin-bottom: var(--space-3);">Skills Required</h4>
+                    <div class="flex gap-2" style="flex-wrap: wrap;">
+                        {% for skill in project.skills_required %}
+                        <span class="tag">{{ skill }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Bid Form -->
+                {% if can_bid %}
+                <div class="card" style="padding: var(--space-8); margin-top: var(--space-8);">
+                    <h3 style="margin-bottom: var(--space-6);">Submit Your Bid</h3>
+                    <form method="post" action="{% url 'freelance:submit_bid' slug=project.slug %}" id="bid-form">
+                        {% csrf_token %}
+                        <div class="grid grid-2 gap-4">
+                            <div class="form-group">
+                                <label class="form-label">Your Bid (₹)</label>
+                                {{ bid_form.amount }}
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Delivery (days)</label>
+                                {{ bid_form.delivery_days }}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Proposal</label>
+                            {{ bid_form.proposal }}
+                        </div>
+                        <button type="submit" class="btn btn-gradient btn-lg" id="submit-bid">Submit Bid</button>
+                    </form>
+                </div>
+                {% elif user_bid %}
+                <div class="card-flat" style="padding: var(--space-6); margin-top: var(--space-6);">
+                    <h4>Your Bid</h4>
+                    <p class="mt-2">₹{{ user_bid.amount|intcomma }} · {{ user_bid.delivery_days }} days · <span class="badge {% if user_bid.status == 'accepted' %}badge-success{% elif user_bid.status == 'pending' %}badge-warning{% else %}badge-danger{% endif %}">{{ user_bid.get_status_display }}</span></p>
+                </div>
+                {% endif %}
+
+                <!-- Bids (visible to client only) -->
+                {% if bids and user == project.client %}
+                <div style="margin-top: var(--space-8);">
+                    <h3 style="margin-bottom: var(--space-6);">Bids ({{ bid_count }})</h3>
+                    {% for bid in bids %}
+                    <div class="card-flat" style="padding: var(--space-5); margin-bottom: var(--space-4);">
+                        <div class="flex-between" style="flex-wrap: wrap; gap: var(--space-3);">
+                            <div class="flex gap-3" style="align-items: center;">
+                                <img src="{{ bid.freelancer.avatar_url }}" alt="" class="avatar">
+                                <div>
+                                    <strong>{{ bid.freelancer.username }}</strong>
+                                    <p class="text-xs text-muted">₹{{ bid.amount|intcomma }} · {{ bid.delivery_days }} days</p>
+                                </div>
+                            </div>
+                            {% if project.status == 'open' %}
+                            <form method="post" action="{% url 'freelance:accept_bid' bid_id=bid.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary btn-sm" onclick="return confirm('Accept this bid?')">Accept</button>
+                            </form>
+                            {% endif %}
+                        </div>
+                        <p class="text-sm text-muted mt-3">{{ bid.proposal|truncatewords:50 }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Sidebar -->
+            <div>
+                <div class="card" style="padding: var(--space-6); position: sticky; top: 80px;">
+                    <h4 style="margin-bottom: var(--space-4);">Project Details</h4>
+                    <div class="flex-between" style="padding: var(--space-3) 0; border-bottom: 1px solid var(--border-subtle);">
+                        <span class="text-sm text-muted">Budget</span>
+                        <strong style="color: var(--accent-light);">{{ project.budget_display }}</strong>
+                    </div>
+                    <div class="flex-between" style="padding: var(--space-3) 0; border-bottom: 1px solid var(--border-subtle);">
+                        <span class="text-sm text-muted">Type</span>
+                        <span>{{ project.get_budget_type_display }}</span>
+                    </div>
+                    {% if project.deadline %}
+                    <div class="flex-between" style="padding: var(--space-3) 0; border-bottom: 1px solid var(--border-subtle);">
+                        <span class="text-sm text-muted">Deadline</span>
+                        <span>{{ project.deadline|date:"M d, Y" }}</span>
+                    </div>
+                    {% endif %}
+                    <div class="flex-between" style="padding: var(--space-3) 0; border-bottom: 1px solid var(--border-subtle);">
+                        <span class="text-sm text-muted">Bids</span>
+                        <span>{{ bid_count }}</span>
+                    </div>
+                    <div class="flex-between" style="padding: var(--space-3) 0;">
+                        <span class="text-sm text-muted">Client</span>
+                        <a href="{% url 'accounts:public_profile' username=project.client.username %}">{{ project.client.username }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

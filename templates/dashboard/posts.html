@@ -1,0 +1,100 @@
+{% extends 'dashboard/index.html' %}
+{% load humanize %}
+
+{% block content %}
+<div style="display: flex; min-height: 100vh;">
+    <aside class="sidebar" id="dashboard-sidebar">
+        <div class="sidebar__section">
+            <div class="sidebar__label">Main</div>
+            <a href="{% url 'dashboard:home' %}" class="sidebar__link" id="dash-home">📊 Overview</a>
+            <a href="{% url 'dashboard:posts' %}" class="sidebar__link active" id="dash-posts">📝 My Posts</a>
+            <a href="{% url 'dashboard:analytics' %}" class="sidebar__link" id="dash-analytics">📈 Analytics</a>
+        </div>
+        <div class="sidebar__section">
+            <div class="sidebar__label">Freelance</div>
+            <a href="{% url 'freelance:my_projects' %}" class="sidebar__link">💼 My Projects</a>
+            {% if user.is_superuser %}
+            <a href="{% url 'freelance:project_create' %}" class="sidebar__link">➕ Post Project</a>
+            {% endif %}
+        </div>
+        <div class="sidebar__section">
+            <div class="sidebar__label">Finance</div>
+            <a href="{% url 'dashboard:payments' %}" class="sidebar__link">💰 Payments</a>
+        </div>
+        <div class="sidebar__section">
+            <div class="sidebar__label">Account</div>
+            <a href="{% url 'dashboard:settings' %}" class="sidebar__link">⚙️ Settings</a>
+            <a href="{% url 'accounts:logout' %}" class="sidebar__link">🚪 Logout</a>
+        </div>
+    </aside>
+
+    <div class="dashboard-content">
+        <div class="flex-between mb-8">
+            <h1 style="font-size: var(--text-3xl);">My Posts</h1>
+            {% if user.is_superuser %}
+            <a href="{% url 'blog:post_create' %}" class="btn btn-gradient">✍️ New Post</a>
+            {% endif %}
+        </div>
+
+        <!-- Filters -->
+        <div class="flex gap-3 mb-6">
+            <a href="?status=all" class="tag {% if status_filter == 'all' %}badge-primary{% endif %}">All</a>
+            <a href="?status=published" class="tag {% if status_filter == 'published' %}badge-primary{% endif %}">Published</a>
+            <a href="?status=draft" class="tag {% if status_filter == 'draft' %}badge-primary{% endif %}">Drafts</a>
+            <a href="?status=archived" class="tag {% if status_filter == 'archived' %}badge-primary{% endif %}">Archived</a>
+        </div>
+
+        {% if posts %}
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Status</th>
+                        <th>Category</th>
+                        <th>Views</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for post in posts %}
+                    <tr>
+                        <td>
+                            <a href="{{ post.get_absolute_url }}" style="font-weight: 600; color: var(--text-primary);">{{ post.title|truncatewords:8 }}</a>
+                            {% if post.is_premium %}<span class="badge badge-warning" style="margin-left: var(--space-2);">Premium</span>{% endif %}
+                        </td>
+                        <td>
+                            <span class="badge {% if post.status == 'published' %}badge-success{% elif post.status == 'draft' %}badge-warning{% else %}badge-info{% endif %}">
+                                {{ post.get_status_display }}
+                            </span>
+                        </td>
+                        <td class="text-muted">{{ post.category.name|default:"—" }}</td>
+                        <td>{{ post.views_count|intcomma }}</td>
+                        <td class="text-muted">{{ post.created_at|date:"M d, Y" }}</td>
+                        <td>
+                            <div class="flex gap-2">
+                                <a href="{% url 'blog:post_edit' slug=post.slug %}" class="btn btn-ghost btn-sm">✏️</a>
+                                <form method="post" action="{% url 'blog:post_delete' slug=post.slug %}" style="display: inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-ghost btn-sm" onclick="return confirm('Delete this post?')">🗑️</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-state__icon">📝</div>
+            <h3 class="empty-state__title">No posts yet</h3>
+            {% if user.is_superuser %}
+            <a href="{% url 'blog:post_create' %}" class="btn btn-gradient">Create Your First Post</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
