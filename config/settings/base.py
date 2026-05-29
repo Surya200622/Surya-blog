@@ -266,7 +266,7 @@ META_USE_TWITTER_PROPERTIES = True
 # Site Config
 # ──────────────────────────────────────────────
 SITE_NAME = config('SITE_NAME', default='BlogCraft')
-SITE_URL = config('SITE_URL', default='http://localhost:8000')
+SITE_URL = config('SITE_URL', default='https://blogcraft.pythonanywhere.com')
 
 # ──────────────────────────────────────────────
 # File Upload Limits
