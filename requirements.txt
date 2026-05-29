@@ -33,3 +33,4 @@ crispy-bootstrap5>=2024.10
 # CORS
 django-cors-headers>=4.4
 PyJWT==2.8.0
+cryptography>=41.0.0
