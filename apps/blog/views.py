@@ -104,16 +104,8 @@ class PostCreateView(View):
                 post.published_at = timezone.now()
             post.save()
             form.save_m2m()
-            # Handle tags
-            tags_str = form.cleaned_data.get('tags_input', '')
-            if tags_str:
-                tag_names = [t.strip() for t in tags_str.split(',') if t.strip()]
-                for name in tag_names:
-                    tag, _ = Tag.objects.get_or_create(
-                        name=name,
-                        defaults={'slug': name.lower().replace(' ', '-')}
-                    )
-                    post.tags.add(tag)
+            # Handle tags and category via form
+            form.save(commit=True)
             messages.success(request, 'Post created successfully! 📝')
             return redirect('blog:post_detail', slug=post.slug)
         return render(request, 'blog/post_create.html', {'form': form})
@@ -150,17 +142,8 @@ class PostUpdateView(View):
                 post.published_at = timezone.now()
             post.save()
             form.save_m2m()
-            # Handle tags
-            tags_str = form.cleaned_data.get('tags_input', '')
-            if tags_str:
-                tag_names = [t.strip() for t in tags_str.split(',') if t.strip()]
-                post.tags.clear()
-                for name in tag_names:
-                    tag, _ = Tag.objects.get_or_create(
-                        name=name,
-                        defaults={'slug': name.lower().replace(' ', '-')}
-                    )
-                    post.tags.add(tag)
+            # Handle tags and category via form
+            form.save(commit=True)
             messages.success(request, 'Post updated successfully!')
             return redirect('blog:post_detail', slug=post.slug)
         return render(request, 'blog/post_create.html', {

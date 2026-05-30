@@ -1,12 +1,49 @@
 {% extends 'base.html' %}
 
+{% block footer %}{% endblock %}
+
 {% block content %}
-<section class="section">
-    <div class="container page-enter">
-        <div class="text-center mb-8">
-            <span class="badge badge-primary mb-4" style="display: inline-block;">📈 Analytics</span>
-            <h1>Performance Analytics</h1>
-            <p class="text-muted mt-2">Track how your content is performing</p>
+<div style="display: flex; min-height: 100vh;">
+    <!-- Sidebar Overlay (mobile) -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="dashboard-sidebar">
+        <div class="sidebar__section">
+            <div class="sidebar__label">Main</div>
+            <a href="{% url 'dashboard:home' %}" class="sidebar__link" id="dash-home">📊 Overview</a>
+            <a href="{% url 'dashboard:posts' %}" class="sidebar__link" id="dash-posts">📝 My Posts</a>
+            <a href="{% url 'dashboard:analytics' %}" class="sidebar__link active" id="dash-analytics">📈 Analytics</a>
+        </div>
+        <div class="sidebar__section">
+            <div class="sidebar__label">Freelance</div>
+            <a href="{% url 'freelance:my_projects' %}" class="sidebar__link">💼 My Projects</a>
+            {% if user.is_superuser %}
+            <a href="{% url 'freelance:project_create' %}" class="sidebar__link">➕ Post Project</a>
+            {% endif %}
+        </div>
+        <div class="sidebar__section">
+            <div class="sidebar__label">Finance</div>
+            <a href="{% url 'dashboard:payments' %}" class="sidebar__link">💰 Payments</a>
+        </div>
+        <div class="sidebar__section">
+            <div class="sidebar__label">Account</div>
+            <a href="{% url 'dashboard:settings' %}" class="sidebar__link">⚙️ Settings</a>
+            <a href="{% url 'accounts:logout' %}" class="sidebar__link">🚪 Logout</a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="dashboard-content">
+        <div class="flex-between mb-8" style="flex-wrap: wrap; gap: var(--space-4);">
+            <div style="display: flex; align-items: center; gap: var(--space-4);">
+                <button class="sidebar-toggle" id="sidebar-toggle-btn" aria-label="Toggle sidebar">☰</button>
+                <div>
+                    <span class="badge badge-primary mb-4" style="display: inline-block;">📈 Analytics</span>
+                    <h1 style="font-size: var(--text-3xl);">Performance Analytics</h1>
+                    <p class="text-muted mt-2">Track how your content is performing</p>
+                </div>
+            </div>
         </div>
 
         {% if top_posts %}
@@ -14,14 +51,14 @@
             <h3 style="margin-bottom: var(--space-6);">Top Performing Posts</h3>
             <div class="table-container">
                 <table class="table">
-                    <thead><tr><th>#</th><th>Title</th><th>Views</th><th>Reading Time</th></tr></thead>
+                    <thead><tr><th>#</th><th>Title</th><th>Views</th><th class="hide-mobile">Reading Time</th></tr></thead>
                     <tbody>
                         {% for post in top_posts %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
                             <td><a href="{{ post.get_absolute_url }}" style="color: var(--text-primary); font-weight: 600;">{{ post.title }}</a></td>
                             <td>{{ post.views_count }}</td>
-                            <td>{{ post.reading_time }} min</td>
+                            <td class="hide-mobile">{{ post.reading_time }} min</td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -36,5 +73,5 @@
         </div>
         {% endif %}
     </div>
-</section>
+</div>
 {% endblock %}

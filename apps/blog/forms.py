@@ -1,4 +1,5 @@
 from django import forms
+from django.utils.text import slugify
 from .models import Post, Comment, Category, Tag
 
 
@@ -15,11 +16,21 @@ class PostForm(forms.ModelForm):
         help_text='Enter tags separated by commas',
     )
 
+    category_name = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-input',
+            'placeholder': 'e.g. Portfolio, Django, React, Tutorial',
+            'id': 'post-category',
+        }),
+        help_text='Enter a category name (will be created if new)',
+    )
+
     class Meta:
         model = Post
         fields = [
             'title', 'content', 'excerpt', 'featured_image',
-            'category', 'status', 'is_premium', 'is_featured',
+            'status', 'is_premium', 'is_featured',
             'meta_title', 'meta_description', 'project_live_url', 'project_price',
         ]
         widgets = {
@@ -33,10 +44,6 @@ class PostForm(forms.ModelForm):
                 'rows': 3,
                 'placeholder': 'Brief summary of your post...',
                 'id': 'post-excerpt',
-            }),
-            'category': forms.Select(attrs={
-                'class': 'form-input',
-                'id': 'post-category',
             }),
             'status': forms.Select(attrs={
                 'class': 'form-input',
@@ -74,9 +81,30 @@ class PostForm(forms.ModelForm):
             }),
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Pre-fill category name when editing
+        if self.instance and self.instance.pk and self.instance.category:
+            self.fields['category_name'].initial = self.instance.category.name
+
     def save(self, commit=True):
-        post = super().save(commit=commit)
+        post = super().save(commit=False)
+        # Handle category from text input
+        category_name = self.cleaned_data.get('category_name', '').strip()
+        if category_name:
+            category, _ = Category.objects.get_or_create(
+                name__iexact=category_name,
+                defaults={
+                    'name': category_name,
+                    'slug': slugify(category_name),
+                }
+            )
+            post.category = category
+        else:
+            post.category = None
+
         if commit:
+            post.save()
             # Handle tags
             tags_str = self.cleaned_data.get('tags_input', '')
             if tags_str:

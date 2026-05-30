@@ -5,6 +5,9 @@
 
 {% block content %}
 <div style="display: flex; min-height: 100vh;">
+    <!-- Sidebar Overlay (mobile) -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
     <!-- Sidebar -->
     <aside class="sidebar" id="dashboard-sidebar">
         <div class="sidebar__section">
@@ -34,9 +37,12 @@
     <!-- Main Content -->
     <div class="dashboard-content">
         <div class="flex-between mb-8" style="flex-wrap: wrap; gap: var(--space-4);">
-            <div>
-                <h1 style="font-size: var(--text-3xl);">Welcome back, {{ user.first_name|default:user.username }}! 👋</h1>
-                <p class="text-muted mt-2">Here's your overview</p>
+            <div style="display: flex; align-items: center; gap: var(--space-4);">
+                <button class="sidebar-toggle" id="sidebar-toggle-btn" aria-label="Toggle sidebar">☰</button>
+                <div>
+                    <h1 style="font-size: var(--text-3xl);">Welcome back, {{ user.first_name|default:user.username }}! 👋</h1>
+                    <p class="text-muted mt-2">Here's your overview</p>
+                </div>
             </div>
             {% if user.is_superuser %}
             <a href="{% url 'blog:post_create' %}" class="btn btn-gradient" id="dash-create-post">
@@ -97,7 +103,7 @@
                 {% for comment in recent_comments %}
                 <div style="padding: var(--space-3) 0; border-bottom: 1px solid var(--border-subtle);">
                     <div class="flex gap-2" style="align-items: center;">
-                        <img src="{{ comment.author.avatar_url }}" alt="" class="avatar avatar-sm">
+                        <img src="{{ comment.author.avatar_url }}" alt="" class="avatar avatar-sm" onerror="this.src='/static/images/default-avatar.svg'">
                         <strong class="text-sm">{{ comment.author.username }}</strong>
                         <span class="text-xs text-muted">on {{ comment.post.title|truncatewords:5 }}</span>
                     </div>

@@ -7,7 +7,60 @@ document.addEventListener('DOMContentLoaded', () => {
     initMobileMenu();
     initToasts();
     initReadingProgress();
+    initDashboardSidebar();
 });
+
+/* ── Dashboard Mobile Sidebar Toggle ── */
+function initDashboardSidebar() {
+    const toggleBtns = document.querySelectorAll('.sidebar-toggle');
+    const sidebar = document.getElementById('dashboard-sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+
+    if (!sidebar || toggleBtns.length === 0) return;
+
+    function openSidebar() {
+        sidebar.classList.add('open');
+        if (overlay) overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeSidebar() {
+        sidebar.classList.remove('open');
+        if (overlay) overlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    toggleBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (sidebar.classList.contains('open')) {
+                closeSidebar();
+            } else {
+                openSidebar();
+            }
+        });
+    });
+
+    // Close on overlay click
+    if (overlay) {
+        overlay.addEventListener('click', closeSidebar);
+    }
+
+    // Close on sidebar link click (mobile)
+    sidebar.querySelectorAll('.sidebar__link').forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 1024) {
+                closeSidebar();
+            }
+        });
+    });
+
+    // Close on ESC key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && sidebar.classList.contains('open')) {
+            closeSidebar();
+        }
+    });
+}
 
 /* ── Scroll Reveal Animations ── */
 function initScrollAnimations() {

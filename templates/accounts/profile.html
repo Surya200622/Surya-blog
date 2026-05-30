@@ -6,7 +6,7 @@
         <!-- Profile Header -->
         <div class="card-glass" style="padding: var(--space-10); margin-bottom: var(--space-8);">
             <div class="flex gap-8" style="align-items: flex-start; flex-wrap: wrap;">
-                <img src="{{ profile_user.avatar_url }}" alt="{{ profile_user.username }}" class="avatar-xxl">
+                <img src="{{ profile_user.avatar_url }}" alt="{{ profile_user.username }}" class="avatar-xxl" onerror="this.src='/static/images/default-avatar.svg'">
                 <div style="flex: 1; min-width: 300px;">
                     <h1 style="font-size: var(--text-3xl);">{{ profile_user.get_full_name|default:profile_user.username }}</h1>
                     <p class="text-muted">@{{ profile_user.username }} · {{ profile_user.get_role_display }}</p>

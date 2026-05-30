@@ -24,9 +24,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
     <!-- CSS -->
-    <link rel="stylesheet" href="{% static 'css/base.css' %}?v=3">
-    <link rel="stylesheet" href="{% static 'css/components.css' %}?v=3">
-    <link rel="stylesheet" href="{% static 'css/animations.css' %}?v=3">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}?v=4">
+    <link rel="stylesheet" href="{% static 'css/components.css' %}?v=4">
+    <link rel="stylesheet" href="{% static 'css/animations.css' %}?v=4">
     {% block extra_css %}{% endblock %}
 
     <!-- Favicon -->
@@ -82,7 +82,7 @@
                         Dashboard
                     </a>
                     <a href="{% url 'accounts:profile' %}" id="nav-avatar">
-                        <img src="{{ user.avatar_url }}" alt="{{ user.username }}" class="avatar avatar-sm">
+                        <img src="{{ user.avatar_url }}" alt="{{ user.username }}" class="avatar avatar-sm" onerror="this.src='/static/images/default-avatar.svg'">
                     </a>
                 {% else %}
                     <a href="{% url 'accounts:login' %}" class="btn btn-ghost btn-sm hide-mobile" id="nav-login">Log In</a>
@@ -160,7 +160,7 @@
     {% endblock %}
 
     <!-- Scripts -->
-    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/main.js' %}?v=4"></script>
     <script>lucide.createIcons();</script>
     {% block extra_js %}{% endblock %}
 </body>
