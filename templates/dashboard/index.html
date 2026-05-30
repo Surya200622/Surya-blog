@@ -13,8 +13,10 @@
         <div class="sidebar__section">
             <div class="sidebar__label">Main</div>
             <a href="{% url 'dashboard:home' %}" class="sidebar__link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" id="dash-home">📊 Overview</a>
+            {% if user.is_superuser %}
             <a href="{% url 'dashboard:posts' %}" class="sidebar__link {% if request.resolver_match.url_name == 'posts' %}active{% endif %}" id="dash-posts">📝 My Posts</a>
             <a href="{% url 'dashboard:analytics' %}" class="sidebar__link {% if request.resolver_match.url_name == 'analytics' %}active{% endif %}" id="dash-analytics">📈 Analytics</a>
+            {% endif %}
         </div>
         <div class="sidebar__section">
             <div class="sidebar__label">Freelance</div>
