@@ -17,3 +17,14 @@ def save_user_profile(sender, instance, **kwargs):
         instance.profile.save()
     except Profile.DoesNotExist:
         Profile.objects.create(user=instance)
+
+try:
+    from allauth.account.signals import user_logged_in
+    @receiver(user_logged_in)
+    def enforce_client_role(sender, user, request, **kwargs):
+        """Ensure any non-superuser logging in is strictly forced to Client role."""
+        if not user.is_superuser and user.role != CustomUser.Role.CLIENT:
+            user.role = CustomUser.Role.CLIENT
+            user.save(update_fields=['role'])
+except ImportError:
+    pass

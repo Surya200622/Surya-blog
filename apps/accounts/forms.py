@@ -36,17 +36,6 @@ class CustomRegistrationForm(UserCreationForm):
             'id': 'register-lastname',
         })
     )
-    role = forms.ChoiceField(
-        choices=[
-            ('author', 'Author — Write & publish blog posts'),
-            ('client', 'Client — Hire freelancers for projects'),
-            ('freelancer', 'Freelancer — Offer services & bid on projects'),
-        ],
-        widget=forms.Select(attrs={
-            'class': 'form-input',
-            'id': 'register-role',
-        })
-    )
     password1 = forms.CharField(
         widget=forms.PasswordInput(attrs={
             'class': 'form-input',
@@ -64,7 +53,7 @@ class CustomRegistrationForm(UserCreationForm):
 
     class Meta:
         model = CustomUser
-        fields = ['email', 'username', 'first_name', 'last_name', 'role', 'password1', 'password2']
+        fields = ['email', 'username', 'first_name', 'last_name', 'password1', 'password2']
 
 
 class CustomLoginForm(AuthenticationForm):
