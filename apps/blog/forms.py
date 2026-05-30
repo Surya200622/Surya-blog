@@ -92,12 +92,10 @@ class PostForm(forms.ModelForm):
         # Handle category from text input
         category_name = self.cleaned_data.get('category_name', '').strip()
         if category_name:
+            slug = slugify(category_name)
             category, _ = Category.objects.get_or_create(
-                name__iexact=category_name,
-                defaults={
-                    'name': category_name,
-                    'slug': slugify(category_name),
-                }
+                slug=slug,
+                defaults={'name': category_name}
             )
             post.category = category
         else:
@@ -111,9 +109,10 @@ class PostForm(forms.ModelForm):
                 tag_names = [t.strip() for t in tags_str.split(',') if t.strip()]
                 post.tags.clear()
                 for name in tag_names:
+                    slug = slugify(name)
                     tag, _ = Tag.objects.get_or_create(
-                        name=name,
-                        defaults={'slug': name.lower().replace(' ', '-')}
+                        slug=slug,
+                        defaults={'name': name}
                     )
                     post.tags.add(tag)
         return post
