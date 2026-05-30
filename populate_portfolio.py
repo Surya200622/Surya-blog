@@ -14,12 +14,19 @@ User = get_user_model()
 
 def populate():
     # 1. Get or create author (Surya)
-    author, _ = User.objects.get_or_create(username='admin')
-    if not author.email:
-        author.email = 'cssurya2006@gmail.com'
-    author.first_name = 'Surya'
-    author.last_name = 'CS'
-    author.save()
+    # Try to find the existing user by email to avoid unique constraint errors
+    email = 'cssurya2006@gmail.com'
+    author = User.objects.filter(email=email).first()
+    
+    if not author:
+        # Fallback if no user has that email yet
+        author, _ = User.objects.get_or_create(username='admin')
+        author.email = email
+        author.first_name = 'Surya'
+        author.last_name = 'CS'
+        author.is_staff = True
+        author.is_superuser = True
+        author.save()
 
     # 2. Create Portfolio Category
     portfolio_cat, _ = Category.objects.get_or_create(
@@ -65,7 +72,7 @@ def populate():
             'slug': 'face-swap-ai',
             'excerpt': 'Professional face swap tool for photos and videos, built with modern web technologies and AI-powered editing capabilities.',
             'content': '<p>Professional face swap tool for photos and videos, built with modern web technologies and AI-powered editing capabilities.</p>',
-            'tags': ['AI', 'Python']
+            'tags': ['AI']
         }
     ]
 
