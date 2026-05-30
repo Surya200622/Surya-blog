@@ -170,6 +170,9 @@ class MyProjectsView(View):
     """View user's projects (as client or freelancer)."""
 
     def get(self, request):
+        if not request.user.is_superuser:
+            return redirect('dashboard:settings')
+            
         role = request.GET.get('role', 'client')
 
         if role == 'freelancer':

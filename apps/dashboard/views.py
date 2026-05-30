@@ -19,6 +19,8 @@ class DashboardHomeView(View):
 
     def get(self, request):
         user = request.user
+        if not user.is_superuser:
+            return redirect('dashboard:settings')
 
         # Blog stats
         user_posts = Post.objects.filter(author=user)
@@ -66,6 +68,9 @@ class DashboardPostsView(View):
     """Manage user's blog posts."""
 
     def get(self, request):
+        if not request.user.is_superuser:
+            return redirect('dashboard:settings')
+            
         status_filter = request.GET.get('status', 'all')
         posts = Post.objects.filter(author=request.user)
 
@@ -86,6 +91,9 @@ class DashboardAnalyticsView(View):
 
     def get(self, request):
         user = request.user
+        if not user.is_superuser:
+            return redirect('dashboard:settings')
+            
         posts = Post.objects.filter(author=user, status='published')
 
         # Top posts by views
@@ -115,6 +123,9 @@ class DashboardPaymentsView(View):
     """Payment history and earnings."""
 
     def get(self, request):
+        if not request.user.is_superuser:
+            return redirect('dashboard:settings')
+            
         payments = Payment.objects.filter(
             order__user=request.user
         ).select_related('order').order_by('-created_at')
