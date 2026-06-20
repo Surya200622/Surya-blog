@@ -93,10 +93,11 @@ class PostForm(forms.ModelForm):
         category_name = self.cleaned_data.get('category_name', '').strip()
         if category_name:
             slug = slugify(category_name)
-            category, _ = Category.objects.get_or_create(
-                slug=slug,
-                defaults={'name': category_name}
-            )
+            category = Category.objects.filter(slug__iexact=slug).first()
+            if not category:
+                category = Category.objects.filter(name__iexact=category_name).first()
+            if not category:
+                category = Category.objects.create(slug=slug, name=category_name)
             post.category = category
         else:
             post.category = None
@@ -110,10 +111,11 @@ class PostForm(forms.ModelForm):
                 post.tags.clear()
                 for name in tag_names:
                     slug = slugify(name)
-                    tag, _ = Tag.objects.get_or_create(
-                        slug=slug,
-                        defaults={'name': name}
-                    )
+                    tag = Tag.objects.filter(slug__iexact=slug).first()
+                    if not tag:
+                        tag = Tag.objects.filter(name__iexact=name).first()
+                    if not tag:
+                        tag = Tag.objects.create(slug=slug, name=name)
                     post.tags.add(tag)
         return post
 
