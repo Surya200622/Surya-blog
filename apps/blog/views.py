@@ -34,7 +34,7 @@ class PostListView(View):
             'page_title': 'Blog',
             'meta_description': 'Explore our latest articles on technology, development, and design.',
         }
-        if request.htmx:
+        if request.headers.get('HX-Request') == 'true':
             return render(request, 'blog/partials/post_list_items.html', context)
         return render(request, 'blog/post_list.html', context)
 
@@ -59,7 +59,7 @@ class ProjectListView(View):
             'page_title': 'Portfolio Projects',
             'meta_description': 'Explore our latest portfolio projects.',
         }
-        if request.htmx:
+        if request.headers.get('HX-Request') == 'true':
             return render(request, 'blog/partials/post_list_items.html', context)
         return render(request, 'blog/project_list.html', context)
 class PostDetailView(View):
