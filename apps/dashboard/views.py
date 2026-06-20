@@ -179,3 +179,17 @@ class DashboardSettingsView(View):
             'page_title': 'Settings',
         }
         return render(request, 'dashboard/settings.html', context)
+
+
+@method_decorator(login_required, name='dispatch')
+class DashboardSavedItemsView(View):
+    """View saved/liked posts."""
+
+    def get(self, request):
+        saved_posts = PostLike.objects.filter(user=request.user).select_related('post__category', 'post__author').order_by('-created_at')
+
+        context = {
+            'saved_posts': saved_posts,
+            'page_title': 'Saved Items',
+        }
+        return render(request, 'dashboard/saved.html', context)

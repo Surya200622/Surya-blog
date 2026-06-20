@@ -1,0 +1,38 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block dashboard_content %}
+<div class="dashboard-header mb-8">
+    <h2>Saved Items</h2>
+    <p class="text-muted">Articles and projects you've liked or bookmarked.</p>
+</div>
+
+<div class="grid grid-2">
+    {% for saved in saved_posts %}
+    <div class="card-flat" style="display: flex; gap: 1rem; align-items: stretch; transition: transform 0.2s;">
+        {% if saved.post.featured_image %}
+        <img src="{{ saved.post.featured_image.url }}" alt="{{ saved.post.title }}" style="width: 120px; object-fit: cover; border-radius: var(--radius-md);">
+        {% else %}
+        <div style="width: 120px; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 2rem; border-radius: var(--radius-md);">📁</div>
+        {% endif %}
+        
+        <div style="flex: 1; display: flex; flex-direction: column; justify-content: space-between; padding: 0.5rem 0;">
+            <div>
+                <span class="text-xs text-muted" style="text-transform: uppercase;">{{ saved.post.category.name|default:"Portfolio" }}</span>
+                <h4 style="margin: 0.25rem 0;"><a href="{{ saved.post.get_absolute_url }}" style="text-decoration: none; color: var(--text-primary);">{{ saved.post.title }}</a></h4>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                <span class="text-xs text-muted">Saved {{ saved.created_at|timesince }} ago</span>
+                <a href="{{ saved.post.get_absolute_url }}" class="btn btn-secondary btn-sm">Read Now</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="empty-state" style="grid-column: 1 / -1; padding: 4rem;">
+        <div class="empty-state__icon">🔖</div>
+        <h3 class="empty-state__title">No saved items yet</h3>
+        <p class="empty-state__desc">Like posts on the blog to bookmark them here.</p>
+        <a href="{% url 'blog:post_list' %}" class="btn btn-primary mt-4">Explore Blog</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

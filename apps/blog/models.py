@@ -4,6 +4,26 @@ from django.utils.text import slugify
 from django.conf import settings
 from django_ckeditor_5.fields import CKEditor5Field
 import math
+import re
+
+
+class PostSeries(models.Model):
+    """A series of related blog posts."""
+    name = models.CharField(max_length=200, unique=True)
+    slug = models.SlugField(max_length=200, unique=True)
+    description = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = "Series"
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
 
 
 class Category(models.Model):
@@ -101,6 +121,14 @@ class Post(models.Model):
         related_name='posts',
     )
     tags = models.ManyToManyField(Tag, blank=True, related_name='posts')
+    series = models.ForeignKey(
+        PostSeries,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='posts'
+    )
+    series_order = models.PositiveIntegerField(default=0, help_text="Order in the series")
 
     # Status & visibility
     status = models.CharField(
@@ -145,11 +173,17 @@ class Post(models.Model):
                 slug = f"{base_slug}-{counter}"
                 counter += 1
             self.slug = slug
-        # Calculate reading time (avg 200 words/min)
+        # Calculate reading time (avg 200 words/min + 12s per image)
         if self.content:
             from django.utils.html import strip_tags
-            word_count = len(strip_tags(self.content).split())
-            self.reading_time = max(1, math.ceil(word_count / 200))
+            plain = strip_tags(self.content)
+            word_count = len(plain.split())
+            
+            img_count = len(re.findall(r'<img[^>]+>', self.content))
+            image_time_seconds = img_count * 12
+            
+            total_minutes = (word_count / 200) + (image_time_seconds / 60)
+            self.reading_time = max(1, math.ceil(total_minutes))
         # Auto-generate excerpt from content
         if not self.excerpt and self.content:
             from django.utils.html import strip_tags

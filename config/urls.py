@@ -34,6 +34,9 @@ urlpatterns = [
     # Freelance
     path('freelance/', include('apps.freelance.urls')),
 
+    # Newsletter
+    path('newsletter/', include('apps.newsletter.urls')),
+
     # CKEditor 5
     path('ckeditor5/', include('django_ckeditor_5.urls')),
 

@@ -73,6 +73,10 @@ class ContactView(View):
             subject = form.cleaned_data['subject']
             message = form.cleaned_data['message']
 
+            # Save to DB
+            from .models import ContactMessage
+            ContactMessage.objects.create(name=name, email=email, subject=subject, message=message)
+
             try:
                 send_mail(
                     subject=f'[BlogCraft Contact] {subject}',
@@ -83,6 +87,10 @@ class ContactView(View):
                 )
             except Exception:
                 pass
+
+            if getattr(request, 'htmx', False):
+                from django.http import HttpResponse
+                return HttpResponse('<div class="alert alert-success mt-4">Message sent! We\'ll get back to you soon. ✉️</div>')
 
             messages.success(request, 'Message sent! We\'ll get back to you soon. ✉️')
             return redirect('pages:contact')

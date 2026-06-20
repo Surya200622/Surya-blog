@@ -34,6 +34,8 @@ class PostListView(View):
             'page_title': 'Blog',
             'meta_description': 'Explore our latest articles on technology, development, and design.',
         }
+        if request.htmx:
+            return render(request, 'blog/partials/post_list_items.html', context)
         return render(request, 'blog/post_list.html', context)
 
 
@@ -48,12 +50,17 @@ class ProjectListView(View):
         page = request.GET.get('page', 1)
         posts_page = paginator.get_page(page)
 
+        trending_projects = Post.objects.filter(status='published').exclude(project_live_url='').order_by('-views_count')[:3]
+
         context = {
             'posts': posts_page,
             'categories': categories,
+            'trending_projects': trending_projects,
             'page_title': 'Portfolio Projects',
             'meta_description': 'Explore our latest portfolio projects.',
         }
+        if request.htmx:
+            return render(request, 'blog/partials/post_list_items.html', context)
         return render(request, 'blog/project_list.html', context)
 class PostDetailView(View):
     """Display a single blog post with comments."""
@@ -73,11 +80,20 @@ class PostDetailView(View):
             is_approved=True, parent=None
         ).select_related('author').prefetch_related('replies__author')
 
-        # Related posts
+        # Related posts (Smart matching by Tags)
+        from django.db.models import Count
         related_posts = Post.objects.filter(
             status='published',
-            category=post.category,
-        ).exclude(id=post.id)[:3]
+            tags__in=post.tags.all()
+        ).exclude(id=post.id).annotate(
+            common_tags=Count('tags')
+        ).order_by('-common_tags')[:3]
+
+        if not related_posts:
+            related_posts = Post.objects.filter(
+                status='published',
+                category=post.category,
+            ).exclude(id=post.id)[:3]
 
         # Check if user liked the post
         is_liked = False

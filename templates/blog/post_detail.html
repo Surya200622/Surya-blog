@@ -2,11 +2,22 @@
 {% load humanize %}
 
 {% block reading_progress %}
-<div class="reading-progress" id="reading-progress" style="width: 0;"></div>
+<div style="position: fixed; top: 0; left: 0; height: 4px; background: var(--accent); z-index: 9999; transition: width 0.1s;" id="reading-progress-bar"></div>
+<script>
+    window.addEventListener('scroll', () => {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        document.getElementById('reading-progress-bar').style.width = scrolled + "%";
+    });
+</script>
 {% endblock %}
 
 {% block og_title %}{{ post.seo_title }}{% endblock %}
 {% block og_description %}{{ post.seo_description }}{% endblock %}
+{% block meta_description %}{{ post.seo_description }}{% endblock %}
+{% block og_image %}{% if post.featured_image %}{{ request.scheme }}://{{ request.get_host }}{{ post.featured_image.url }}{% endif %}{% endblock %}
+{% block twitter_image %}{% if post.featured_image %}{{ request.scheme }}://{{ request.get_host }}{{ post.featured_image.url }}{% endif %}{% endblock %}
 
 {% block extra_head %}
 <!-- JSON-LD Structured Data -->
@@ -88,7 +99,49 @@
             
             {% if post.project_live_url or post.project_price %}
             <aside style="position: sticky; top: 100px; padding: 2rem; background: var(--bg-secondary); border-radius: 1.5rem; border: 1px solid var(--border-color);">
-                <h4 style="margin-top: 0; margin-bottom: 1.5rem; color: var(--text-primary);">Project Quick Links</h4>
+                
+                <!-- Table of Contents -->
+                <div id="toc-container" style="display: none; margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border-color);">
+                    <h4 style="margin-top: 0; margin-bottom: 1rem; color: var(--text-primary); text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem;">Contents</h4>
+                    <ul id="toc-list" style="list-style: none; padding-left: 0; margin: 0; font-size: 0.9rem; line-height: 1.8;"></ul>
+                </div>
+                
+                <script>
+                    document.addEventListener('DOMContentLoaded', () => {
+                        const content = document.querySelector('.post-content');
+                        const headers = content.querySelectorAll('h2, h3');
+                        if (headers.length > 0) {
+                            const tocContainer = document.getElementById('toc-container');
+                            const tocList = document.getElementById('toc-list');
+                            tocContainer.style.display = 'block';
+                            
+                            headers.forEach((header, index) => {
+                                const id = 'heading-' + index;
+                                header.id = id;
+                                
+                                const li = document.createElement('li');
+                                li.style.marginBottom = '0.5rem';
+                                if (header.tagName.toLowerCase() === 'h3') {
+                                    li.style.paddingLeft = '1rem';
+                                    li.style.fontSize = '0.85rem';
+                                }
+                                
+                                const a = document.createElement('a');
+                                a.href = '#' + id;
+                                a.textContent = header.textContent;
+                                a.style.color = 'var(--text-secondary)';
+                                a.style.textDecoration = 'none';
+                                a.onmouseover = () => a.style.color = 'var(--accent)';
+                                a.onmouseout = () => a.style.color = 'var(--text-secondary)';
+                                
+                                li.appendChild(a);
+                                tocList.appendChild(li);
+                            });
+                        }
+                    });
+                </script>
+                
+                <h4 style="margin-top: 0; margin-bottom: 1.5rem; color: var(--text-primary); text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem;">Project Quick Links</h4>
                 
                 {% if post.project_price %}
                 <div style="margin-bottom: 1.5rem;">
