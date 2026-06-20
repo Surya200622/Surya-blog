@@ -1,0 +1,15 @@
+{% for post in posts %}
+<a href="{{ post.get_absolute_url }}" style="display: flex; gap: 1rem; align-items: center; padding: 1rem; border-bottom: 1px solid var(--border-color); text-decoration: none; color: inherit; transition: background 0.2s;">
+    {% if post.featured_image %}
+    <img src="{{ post.featured_image.url }}" alt="{{ post.title }}" style="width: 50px; height: 50px; border-radius: 0.5rem; object-fit: cover;">
+    {% else %}
+    <div style="width: 50px; height: 50px; border-radius: 0.5rem; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">📝</div>
+    {% endif %}
+    <div>
+        <h4 style="margin: 0; font-size: 1rem;">{{ post.title }}</h4>
+        <span style="font-size: 0.8rem; color: var(--text-muted);">{{ post.category.name|default:"Blog" }}</span>
+    </div>
+</a>
+{% empty %}
+<div style="padding: 1rem; text-align: center; color: var(--text-muted);">No results found.</div>
+{% endfor %}

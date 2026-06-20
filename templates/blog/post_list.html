@@ -9,6 +9,9 @@
             <p style="font-size: var(--text-lg);">Explore articles on tech, design, and more.</p>
         </div>
 
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) 250px; gap: 3rem; align-items: start;">
+            <div style="min-width: 0;">
+
         <!-- Search -->
         <div class="flex-center mb-8">
             <form action="{% url 'blog:search' %}" method="get" style="max-width: 500px; width: 100%;" id="blog-search-form">
@@ -91,6 +94,21 @@
             {% endif %}
         </div>
         {% endif %}
+        
+            </div>
+            
+            <!-- Tag Cloud Sidebar -->
+            <aside class="hide-mobile" style="position: sticky; top: 100px; padding: 2rem; background: var(--bg-secondary); border-radius: 1.5rem; border: 1px solid var(--border-color);">
+                <h4 style="margin-top: 0; margin-bottom: 1.5rem; color: var(--text-primary); text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem;">Technologies</h4>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                    {% for t in tags %}
+                    <a href="{% url 'blog:tag' slug=t.slug %}" class="tag" style="background: var(--bg-tertiary); color: var(--text-secondary); border: 1px solid var(--border-color); border-radius: 1rem; padding: 0.3rem 0.75rem; font-size: 0.8rem; text-decoration: none; transition: transform 0.2s;">
+                        {{ t.name }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </aside>
+        </div>
     </div>
 </section>
 {% endblock %}

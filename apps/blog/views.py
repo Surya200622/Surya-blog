@@ -19,6 +19,7 @@ class PostListView(View):
         posts = Post.objects.filter(status='published').select_related('author', 'category')
         featured_posts = posts.filter(is_featured=True)[:3]
         categories = Category.objects.all()
+        tags = Tag.objects.all()
 
         # Pagination
         paginator = Paginator(posts, 9)
@@ -29,12 +30,31 @@ class PostListView(View):
             'posts': posts_page,
             'featured_posts': featured_posts,
             'categories': categories,
+            'tags': tags,
             'page_title': 'Blog',
             'meta_description': 'Explore our latest articles on technology, development, and design.',
         }
         return render(request, 'blog/post_list.html', context)
 
 
+class ProjectListView(View):
+    """Display paginated list of portfolio projects."""
+
+    def get(self, request):
+        posts = Post.objects.filter(status='published').exclude(project_live_url='').select_related('author', 'category')
+        categories = Category.objects.all()
+
+        paginator = Paginator(posts, 9)
+        page = request.GET.get('page', 1)
+        posts_page = paginator.get_page(page)
+
+        context = {
+            'posts': posts_page,
+            'categories': categories,
+            'page_title': 'Portfolio Projects',
+            'meta_description': 'Explore our latest portfolio projects.',
+        }
+        return render(request, 'blog/project_list.html', context)
 class PostDetailView(View):
     """Display a single blog post with comments."""
 
@@ -225,8 +245,12 @@ class SearchView(View):
                 Q(content__icontains=query) |
                 Q(excerpt__icontains=query) |
                 Q(tags__name__icontains=query),
+                Q(tags__name__icontains=query),
                 status='published',
             ).distinct().select_related('author', 'category')
+
+        if request.headers.get('HX-Request'):
+            return render(request, 'blog/partials/search_results.html', {'posts': posts[:5]})
 
         paginator = Paginator(posts, 9)
         page = request.GET.get('page', 1)

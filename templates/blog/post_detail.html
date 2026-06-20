@@ -80,9 +80,38 @@
         </div>
         {% endif %}
 
-        <!-- Post Content -->
-        <div class="post-content" style="font-size: var(--text-lg); line-height: 1.8;">
-            {{ post.content|safe }}
+        <!-- Post Content & Sidebar -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem; align-items: start;">
+            <div class="post-content" style="font-size: var(--text-lg); line-height: 1.8; min-width: 0;">
+                {{ post.content|safe }}
+            </div>
+            
+            {% if post.project_live_url or post.project_price %}
+            <aside style="position: sticky; top: 100px; padding: 2rem; background: var(--bg-secondary); border-radius: 1.5rem; border: 1px solid var(--border-color);">
+                <h4 style="margin-top: 0; margin-bottom: 1.5rem; color: var(--text-primary);">Project Quick Links</h4>
+                
+                {% if post.project_price %}
+                <div style="margin-bottom: 1.5rem;">
+                    <span style="color: var(--text-tertiary); font-size: 0.9rem; display: block; text-transform: uppercase; letter-spacing: 1px;">Pricing</span>
+                    <strong style="color: var(--accent); font-size: 1.5rem;">{{ post.project_price }}</strong>
+                </div>
+                {% endif %}
+                
+                {% if post.project_live_url %}
+                <a href="{{ post.project_live_url }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="width: 100%; display: flex; justify-content: center; padding: 1rem; border-radius: 1rem;">
+                    Visit Live Site ↗
+                </a>
+                {% endif %}
+                
+                <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--border-color);">
+                    <span style="color: var(--text-tertiary); font-size: 0.9rem; display: block; margin-bottom: 1rem;">Share this project</span>
+                    <div style="display: flex; gap: 1rem;">
+                        <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}&text={{ post.title|urlencode }}" target="_blank" class="btn btn-icon btn-secondary">🐦</a>
+                        <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ request.build_absolute_uri }}&title={{ post.title|urlencode }}" target="_blank" class="btn btn-icon btn-secondary">💼</a>
+                    </div>
+                </div>
+            </aside>
+            {% endif %}
         </div>
 
         <!-- Tags -->
