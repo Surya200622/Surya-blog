@@ -123,8 +123,6 @@ class DashboardPaymentsView(View):
     """Payment history and earnings."""
 
     def get(self, request):
-        if not request.user.is_superuser:
-            return redirect('dashboard:settings')
             
         payments = Payment.objects.filter(
             order__user=request.user

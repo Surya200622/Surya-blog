@@ -185,7 +185,7 @@
 
             <div style="background: var(--bg-tertiary); padding: 1.5rem; border-radius: 1rem; margin-top: 2rem; text-align: center; border: 1px solid var(--border-color);">
                 <h3 style="margin-bottom: 0.5rem; color: var(--text-secondary);">Estimated Cost</h3>
-                <div style="font-size: 3rem; font-weight: 800; color: var(--accent);">₹<span id="calc-total">3,500</span></div>
+                <div style="font-size: 3rem; font-weight: 800; color: var(--accent);">₹<span id="calc-total">5,500</span></div>
                 <a href="{% url 'pages:contact' %}" class="btn btn-gradient mt-4" style="justify-content: center; width: 100%;">Discuss Project Requirements</a>
             </div>
         </div>
@@ -214,11 +214,12 @@ function updateCalculator() {
     
     // Package
     const packageMult = parseFloat(document.getElementById('calc-package').value);
-    total = Math.round(total * packageMult);
-    
+    total = Math.round(total * packageMult);    
+    // Format with commas
     document.getElementById('calc-total').innerText = total.toLocaleString('en-IN');
 }
-// Initial calculation
+
+// Initialize on page load
 document.addEventListener('DOMContentLoaded', updateCalculator);
 </script>
 

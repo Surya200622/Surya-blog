@@ -40,7 +40,7 @@
 
         <form method="post" enctype="multipart/form-data" id="settings-form">
             {% csrf_token %}
-            <div class="card" style="padding: var(--space-8); margin-bottom: var(--space-6);">
+            <div class="card-glass" style="padding: var(--space-8); margin-bottom: var(--space-6);">
                 <h3 style="margin-bottom: var(--space-6);">Personal Information</h3>
                 <div class="grid grid-2 gap-4">
                     {% for field in user_form %}
@@ -60,26 +60,7 @@
                     {% endfor %}
                 </div>
             </div>
-            <div class="card" style="padding: var(--space-8); margin-bottom: var(--space-6);">
-                <h3 style="margin-bottom: var(--space-6);">Professional Info</h3>
-                <div class="grid grid-2 gap-4">
-                    {% for field in profile_form %}
-                    <div class="form-group {% if field.name == 'is_available' %}col-span-2{% endif %}" {% if field.name == 'is_available' %}style="grid-column: 1 / -1;"{% endif %}>
-                        {% if field.field.widget.input_type == 'checkbox' %}
-                            <label style="display: flex; gap: 0.5rem; align-items: center; cursor: pointer;">
-                                {{ field }}
-                                <span class="form-label" style="margin: 0;">{{ field.label }}</span>
-                            </label>
-                        {% else %}
-                            <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
-                            {{ field }}
-                        {% endif %}
-                        {% if field.errors %}<div class="form-error">{{ field.errors|striptags }}</div>{% endif %}
-                        {% if field.help_text %}<p class="text-xs text-muted" style="margin-top: 0.25rem;">{{ field.help_text }}</p>{% endif %}
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
+
             <button type="submit" class="btn btn-gradient btn-lg" id="settings-save">Save Settings</button>
         </form>
     </div>
