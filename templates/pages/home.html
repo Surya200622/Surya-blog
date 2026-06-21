@@ -51,6 +51,45 @@
             margin: 0 auto 1.5rem auto !important;
         }
     }
+
+    /* Calculator Styles */
+    .calc-feature-label {
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+        padding: 1rem;
+        border: 1px solid var(--border-color);
+        border-radius: 0.75rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        background: var(--bg-tertiary);
+    }
+    .calc-feature-label:hover {
+        border-color: var(--accent);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .calc-feature-label:has(input:checked) {
+        border-color: var(--accent);
+        background: rgba(139, 92, 246, 0.05);
+    }
+    .calc-feature-label input[type="checkbox"] {
+        width: 1.25rem;
+        height: 1.25rem;
+        accent-color: var(--accent);
+        cursor: pointer;
+    }
+    .calc-feature-text {
+        font-weight: 500;
+        color: var(--text-primary);
+        line-height: 1.2;
+    }
+    .calc-feature-price {
+        color: var(--text-tertiary);
+        font-size: 0.85em;
+        display: block;
+        margin-top: 0.25rem;
+    }
 </style>
 
 <!-- Hero Section -->
@@ -180,41 +219,44 @@
             <div class="grid grid-2 gap-4">
                 <div class="form-group">
                     <label class="form-label">Project Type</label>
-                    <select id="calc-project-type" class="form-input" onchange="updateCalculator()">
+                    <select id="calc-project-type" class="form-input" onchange="updateCalculator()" style="padding: 0.75rem; border-radius: 0.5rem;">
                         <option value="3500">Business Website (₹3,500)</option>
                         <option value="8000">E-commerce Website (₹8,000)</option>
                         <option value="2500">Portfolio Website (₹2,500)</option>
                         <option value="12000">SaaS Dashboard (₹12,000)</option>
                         <option value="7500">Admin Dashboard (₹7,500)</option>
                         <option value="2000">Landing Page (₹2,000)</option>
+                        <option value="6000">Booking Website (₹6,000)</option>
+                        <option value="3000">Blog Website (₹3,000)</option>
+                        <option value="9000">Client Portal (₹9,000)</option>
                         <option value="10000">Custom Web App (₹10,000)</option>
                     </select>
                 </div>
                 
                 <div class="form-group">
                     <label class="form-label">Number of Pages</label>
-                    <input type="number" id="calc-pages" class="form-input" value="5" min="1" onchange="updateCalculator()">
+                    <input type="number" id="calc-pages" class="form-input" value="5" min="1" onchange="updateCalculator()" style="padding: 0.75rem; border-radius: 0.5rem;">
                 </div>
             </div>
 
             <div class="form-group" style="margin-top: var(--space-6);">
                 <label class="form-label">Additional Features</label>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-                    <label style="display: flex; gap: 0.5rem; align-items: center;"><input type="checkbox" value="1500" class="calc-feature" onchange="updateCalculator()"> Admin Dashboard (+₹1,500)</label>
-                    <label style="display: flex; gap: 0.5rem; align-items: center;"><input type="checkbox" value="1000" class="calc-feature" onchange="updateCalculator()"> Client Dashboard (+₹1,000)</label>
-                    <label style="display: flex; gap: 0.5rem; align-items: center;"><input type="checkbox" value="500" class="calc-feature" onchange="updateCalculator()"> Authentication (+₹500)</label>
-                    <label style="display: flex; gap: 0.5rem; align-items: center;"><input type="checkbox" value="2500" class="calc-feature" onchange="updateCalculator()"> Database (+₹2,500)</label>
-                    <label style="display: flex; gap: 0.5rem; align-items: center;"><input type="checkbox" value="1000" class="calc-feature" onchange="updateCalculator()"> Payment Gateway (+₹1,000)</label>
-                    <label style="display: flex; gap: 0.5rem; align-items: center;"><input type="checkbox" value="2000" class="calc-feature" onchange="updateCalculator()"> CMS Support (+₹2,000)</label>
-                    <label style="display: flex; gap: 0.5rem; align-items: center;"><input type="checkbox" value="1000" class="calc-feature" onchange="updateCalculator()"> SEO (+₹1,000)</label>
-                    <label style="display: flex; gap: 0.5rem; align-items: center;"><input type="checkbox" value="1500" class="calc-feature" onchange="updateCalculator()"> Real-time Chat (+₹1,500)</label>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem;">
+                    <label class="calc-feature-label"><input type="checkbox" value="1500" class="calc-feature" onchange="updateCalculator()"> <div class="calc-feature-text">Admin Dashboard <span class="calc-feature-price">+₹1,500</span></div></label>
+                    <label class="calc-feature-label"><input type="checkbox" value="1000" class="calc-feature" onchange="updateCalculator()"> <div class="calc-feature-text">Client Dashboard <span class="calc-feature-price">+₹1,000</span></div></label>
+                    <label class="calc-feature-label"><input type="checkbox" value="500" class="calc-feature" onchange="updateCalculator()"> <div class="calc-feature-text">Authentication <span class="calc-feature-price">+₹500</span></div></label>
+                    <label class="calc-feature-label"><input type="checkbox" value="2500" class="calc-feature" onchange="updateCalculator()"> <div class="calc-feature-text">Database <span class="calc-feature-price">+₹2,500</span></div></label>
+                    <label class="calc-feature-label"><input type="checkbox" value="1000" class="calc-feature" onchange="updateCalculator()"> <div class="calc-feature-text">Payment Gateway <span class="calc-feature-price">+₹1,000</span></div></label>
+                    <label class="calc-feature-label"><input type="checkbox" value="2000" class="calc-feature" onchange="updateCalculator()"> <div class="calc-feature-text">CMS Support <span class="calc-feature-price">+₹2,000</span></div></label>
+                    <label class="calc-feature-label"><input type="checkbox" value="1000" class="calc-feature" onchange="updateCalculator()"> <div class="calc-feature-text">SEO <span class="calc-feature-price">+₹1,000</span></div></label>
+                    <label class="calc-feature-label"><input type="checkbox" value="1500" class="calc-feature" onchange="updateCalculator()"> <div class="calc-feature-text">Real-time Chat <span class="calc-feature-price">+₹1,500</span></div></label>
                 </div>
             </div>
 
             <div class="grid grid-2 gap-4" style="margin-top: var(--space-6);">
                 <div class="form-group">
                     <label class="form-label">UI Complexity</label>
-                    <select id="calc-ui" class="form-input" onchange="updateCalculator()">
+                    <select id="calc-ui" class="form-input" onchange="updateCalculator()" style="padding: 0.75rem; border-radius: 0.5rem;">
                         <option value="1.0">Basic (1x)</option>
                         <option value="1.3">Professional (1.3x)</option>
                         <option value="1.7">Premium (1.7x)</option>
@@ -222,7 +264,7 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">Package</label>
-                    <select id="calc-package" class="form-input" onchange="updateCalculator()">
+                    <select id="calc-package" class="form-input" onchange="updateCalculator()" style="padding: 0.75rem; border-radius: 0.5rem;">
                         <option value="1.0">Starter (1x)</option>
                         <option value="1.5">Professional (1.5x)</option>
                         <option value="2.2">Business (2.2x)</option>
@@ -233,7 +275,7 @@
 
             <div style="background: var(--bg-tertiary); padding: 1.5rem; border-radius: 1rem; margin-top: 2rem; text-align: center; border: 1px solid var(--border-color);">
                 <h3 style="margin-bottom: 0.5rem; color: var(--text-secondary);">Estimated Cost</h3>
-                <div style="font-size: 3rem; font-weight: 800; color: var(--accent);">₹<span id="calc-total">5,500</span></div>
+                <div style="font-size: 3rem; font-weight: 800; color: var(--accent);">₹<span id="calc-total">3,500</span></div>
                 <a href="{% url 'pages:contact' %}" class="btn btn-gradient mt-4" style="justify-content: center; width: 100%;">Discuss Project Requirements</a>
             </div>
         </div>
