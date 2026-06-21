@@ -48,6 +48,62 @@ class LoginView(View):
         return render(request, 'accounts/login.html', {'form': form})
 
 
+class AdminPortalLoginView(View):
+    """Exclusive login view for Admins."""
+
+    def get(self, request):
+        if request.user.is_authenticated:
+            if request.user.is_superuser:
+                return redirect('dashboard:home')
+            else:
+                from django.contrib.auth import logout
+                logout(request)
+                messages.warning(request, 'You do not have admin access. Logged out.')
+                
+        form = CustomLoginForm()
+        return render(request, 'accounts/admin_login.html', {'form': form})
+
+    def post(self, request):
+        form = CustomLoginForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            if not user.is_superuser:
+                messages.error(request, 'Access denied: You are not an administrator.')
+                return render(request, 'accounts/admin_login.html', {'form': form})
+                
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+            messages.success(request, f'Admin Portal Access Granted: Welcome {user.username}!')
+            return redirect('dashboard:home')
+        return render(request, 'accounts/admin_login.html', {'form': form})
+
+
+class AdminSetupView(View):
+    """One-time admin registration view."""
+
+    def get(self, request):
+        if CustomUser.objects.filter(is_superuser=True).exists():
+            return redirect('accounts:admin_login')
+            
+        form = CustomRegistrationForm()
+        return render(request, 'accounts/admin_setup.html', {'form': form})
+
+    def post(self, request):
+        if CustomUser.objects.filter(is_superuser=True).exists():
+            return redirect('accounts:admin_login')
+            
+        form = CustomRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.is_superuser = True
+            user.is_staff = True
+            user.save()
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+            messages.success(request, 'Admin account successfully created!')
+            return redirect('dashboard:home')
+            
+        return render(request, 'accounts/admin_setup.html', {'form': form})
+
+
 class LogoutView(View):
     """User logout view."""
 
