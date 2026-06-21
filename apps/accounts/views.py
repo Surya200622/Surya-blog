@@ -96,6 +96,7 @@ class AdminSetupView(View):
             user = form.save(commit=False)
             user.is_superuser = True
             user.is_staff = True
+            user.role = CustomUser.Role.ADMIN
             user.save()
             login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             messages.success(request, 'Admin account successfully created!')

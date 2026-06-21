@@ -9,7 +9,7 @@
                 <img src="{{ profile_user.avatar_url }}" alt="{{ profile_user.username }}" class="avatar-xxl" onerror="this.src='/static/images/default-avatar.svg'">
                 <div style="flex: 1; min-width: 300px;">
                     <h1 style="font-size: var(--text-3xl);">{{ profile_user.get_full_name|default:profile_user.username }}</h1>
-                    <p class="text-muted">@{{ profile_user.username }} · {{ profile_user.get_role_display }}</p>
+                    <p class="text-muted">@{{ profile_user.username }} · {% if profile_user.is_superuser %}Admin{% else %}{{ profile_user.get_role_display }}{% endif %}</p>
                     {% if profile_user.email %}
                     <p class="text-muted" style="margin-top: var(--space-2);"><span style="margin-right: 0.5rem;">✉️</span>{{ profile_user.email }}</p>
                     {% endif %}
