@@ -497,20 +497,29 @@ select.form-input {
     font-size: var(--text-xl);
 }
 
-@media (max-width: 768px) {
-    .navbar__toggle { display: flex; }
+@media (max-width: 1024px) {
+    .navbar__toggle { display: flex; font-size: var(--text-2xl); padding: var(--space-3); }
     .navbar__links {
         display: none;
         position: absolute;
         top: 100%;
         left: 0;
         right: 0;
-        background: var(--bg-secondary);
+        background: var(--bg-card);
         border-bottom: 1px solid var(--border-subtle);
         flex-direction: column;
-        padding: var(--space-4);
+        padding: var(--space-6);
+        gap: var(--space-2);
+        box-shadow: var(--shadow-xl);
+        border-radius: 0 0 var(--radius-xl) var(--radius-xl);
     }
     .navbar__links.open { display: flex; }
+    .navbar__links .navbar__link {
+        font-size: var(--text-lg);
+        padding: var(--space-4);
+        text-align: center;
+        width: 100%;
+    }
     .navbar__actions .hide-mobile { display: none; }
 }
 

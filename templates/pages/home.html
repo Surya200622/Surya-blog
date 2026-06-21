@@ -27,9 +27,19 @@
         .hero-stats {
             justify-content: center !important;
             margin-top: 2rem !important;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+            gap: 1.5rem !important;
         }
         .hero-stats > div {
             text-align: center !important;
+            flex: 1;
+        }
+        .hero-stats > div > div:first-child {
+            font-size: 2rem !important;
+        }
+        .hero-stats > div > div:last-child {
+            font-size: 0.8rem !important;
         }
         .hero-buttons {
             justify-content: center !important;
