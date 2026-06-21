@@ -17,13 +17,16 @@ class HomeView(View):
             status='published', is_featured=True
         ).select_related('author', 'category')[:3]
 
+        from django.db.models import Q
+        
         latest_posts = Post.objects.filter(
+            Q(project_live_url__isnull=True) | Q(project_live_url=''),
             status='published'
-        ).exclude(category__slug='portfolio').order_by('-published_at')[:3]
+        ).order_by('-published_at')[:3]
 
-        portfolio_posts = Post.objects.filter(
-            status='published', category__slug='portfolio'
-        ).order_by('-published_at')[:4]
+        portfolio_posts = Post.objects.exclude(
+            Q(project_live_url__isnull=True) | Q(project_live_url='')
+        ).filter(status='published').order_by('-published_at')[:4]
 
         plans = Plan.objects.filter(is_active=True).order_by('price')[:3]
 
