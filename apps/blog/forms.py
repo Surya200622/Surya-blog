@@ -31,7 +31,7 @@ class PostForm(forms.ModelForm):
         fields = [
             'title', 'content', 'excerpt', 'featured_image',
             'status', 'is_premium', 'is_featured',
-            'meta_title', 'meta_description', 'project_live_url', 'project_price',
+            'meta_title', 'meta_description',
         ]
         widgets = {
             'title': forms.TextInput(attrs={
@@ -69,16 +69,6 @@ class PostForm(forms.ModelForm):
             }),
             'is_premium': forms.CheckboxInput(attrs={'class': 'form-checkbox'}),
             'is_featured': forms.CheckboxInput(attrs={'class': 'form-checkbox'}),
-            'project_live_url': forms.URLInput(attrs={
-                'class': 'form-input',
-                'placeholder': 'https://example.com',
-                'id': 'project-live-url',
-            }),
-            'project_price': forms.TextInput(attrs={
-                'class': 'form-input',
-                'placeholder': 'e.g., $500, Fixed, Custom',
-                'id': 'project-price',
-            }),
         }
 
     def __init__(self, *args, **kwargs):
@@ -118,6 +108,26 @@ class PostForm(forms.ModelForm):
                         tag = Tag.objects.create(slug=slug, name=name)
                     post.tags.add(tag)
         return post
+
+
+class ProjectForm(PostForm):
+    """Form for creating and editing portfolio projects."""
+
+    class Meta(PostForm.Meta):
+        fields = PostForm.Meta.fields + ['project_live_url', 'project_price']
+        widgets = {
+            **PostForm.Meta.widgets,
+            'project_live_url': forms.URLInput(attrs={
+                'class': 'form-input',
+                'placeholder': 'https://example.com',
+                'id': 'project-live-url',
+            }),
+            'project_price': forms.TextInput(attrs={
+                'class': 'form-input',
+                'placeholder': 'e.g., $500, Fixed, Custom',
+                'id': 'project-price',
+            }),
+        }
 
 
 class CommentForm(forms.ModelForm):

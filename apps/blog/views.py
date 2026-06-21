@@ -9,7 +9,7 @@ from django.http import JsonResponse
 from django.core.paginator import Paginator
 
 from .models import Post, Category, Tag, Comment, PostLike
-from .forms import PostForm, CommentForm, SearchForm
+from .forms import PostForm, ProjectForm, CommentForm, SearchForm
 
 
 class PostListView(View):
@@ -144,7 +144,41 @@ class PostCreateView(View):
             form.save(commit=True)
             messages.success(request, 'Post created successfully! 📝')
             return redirect('blog:post_detail', slug=post.slug)
-        return render(request, 'blog/post_create.html', {'form': form})
+        return render(request, 'blog/post_create.html', {'form': form, 'page_title': 'Create Post'})
+
+
+@method_decorator(login_required, name='dispatch')
+class ProjectCreateView(View):
+    """Create a new portfolio project."""
+
+    def get(self, request):
+        if not request.user.is_superuser:
+            messages.error(request, 'Only the admin can create posts and projects.')
+            return redirect('blog:project_list')
+        form = ProjectForm()
+        return render(request, 'blog/project_create.html', {
+            'form': form,
+            'page_title': 'Create Project',
+        })
+
+    def post(self, request):
+        if not request.user.is_superuser:
+            messages.error(request, 'Only the admin can create posts and projects.')
+            return redirect('blog:project_list')
+
+        form = ProjectForm(request.POST, request.FILES)
+        if form.is_valid():
+            project = form.save(commit=False)
+            project.author = request.user
+            if project.status == 'published' and not project.published_at:
+                project.published_at = timezone.now()
+            project.save()
+            form.save_m2m()
+            # Handle tags and category via form
+            form.save(commit=True)
+            messages.success(request, 'Project created successfully! 💼')
+            return redirect('blog:post_detail', slug=project.slug)
+        return render(request, 'blog/project_create.html', {'form': form, 'page_title': 'Create Project'})
 
 
 @method_decorator(login_required, name='dispatch')
@@ -186,6 +220,50 @@ class PostUpdateView(View):
             'form': form,
             'post': post,
             'is_edit': True,
+            'page_title': f'Edit: {post.title}',
+        })
+
+
+@method_decorator(login_required, name='dispatch')
+class ProjectUpdateView(View):
+    """Edit an existing portfolio project."""
+
+    def get(self, request, slug):
+        if not request.user.is_superuser:
+            messages.error(request, 'Permission denied.')
+            return redirect('blog:project_list')
+        project = get_object_or_404(Post, slug=slug, author=request.user)
+        form = ProjectForm(instance=project)
+        # Pre-fill tags
+        form.fields['tags_input'].initial = ', '.join(project.tags.values_list('name', flat=True))
+        return render(request, 'blog/project_create.html', {
+            'form': form,
+            'post': project,
+            'is_edit': True,
+            'page_title': f'Edit: {project.title}',
+        })
+
+    def post(self, request, slug):
+        if not request.user.is_superuser:
+            messages.error(request, 'Permission denied.')
+            return redirect('blog:project_list')
+        project = get_object_or_404(Post, slug=slug, author=request.user)
+        form = ProjectForm(request.POST, request.FILES, instance=project)
+        if form.is_valid():
+            project = form.save(commit=False)
+            if project.status == 'published' and not project.published_at:
+                project.published_at = timezone.now()
+            project.save()
+            form.save_m2m()
+            # Handle tags and category via form
+            form.save(commit=True)
+            messages.success(request, 'Project updated successfully!')
+            return redirect('blog:post_detail', slug=project.slug)
+        return render(request, 'blog/project_create.html', {
+            'form': form,
+            'post': project,
+            'is_edit': True,
+            'page_title': f'Edit: {project.title}',
         })
 
 

@@ -38,7 +38,10 @@
                 <h1 style="font-size: var(--text-3xl);">My Posts</h1>
             </div>
             {% if user.is_superuser %}
-            <a href="{% url 'blog:post_create' %}" class="btn btn-gradient">✍️ New Post</a>
+            <div style="display: flex; gap: var(--space-4);">
+                <a href="{% url 'blog:post_create' %}" class="btn btn-gradient">✍️ New Post</a>
+                <a href="{% url 'blog:project_create' %}" class="btn btn-primary">💼 New Project</a>
+            </div>
             {% endif %}
         </div>
 
@@ -80,7 +83,11 @@
                         <td class="text-muted hide-mobile">{{ post.created_at|date:"M d, Y" }}</td>
                         <td>
                             <div class="flex gap-2">
-                                <a href="{% url 'blog:post_edit' slug=post.slug %}" class="btn btn-ghost btn-sm">✏️</a>
+                                {% if post.project_live_url or post.project_price %}
+                                    <a href="{% url 'blog:project_edit' slug=post.slug %}" class="btn btn-ghost btn-sm">✏️</a>
+                                {% else %}
+                                    <a href="{% url 'blog:post_edit' slug=post.slug %}" class="btn btn-ghost btn-sm">✏️</a>
+                                {% endif %}
                                 <form method="post" action="{% url 'blog:post_delete' slug=post.slug %}" style="display: inline;">
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-ghost btn-sm" onclick="return confirm('Delete this post?')">🗑️</button>
@@ -97,7 +104,10 @@
             <div class="empty-state__icon">📝</div>
             <h3 class="empty-state__title">No posts yet</h3>
             {% if user.is_superuser %}
-            <a href="{% url 'blog:post_create' %}" class="btn btn-gradient">Create Your First Post</a>
+            <div style="display: flex; gap: var(--space-4); justify-content: center; margin-top: var(--space-4);">
+                <a href="{% url 'blog:post_create' %}" class="btn btn-gradient">Create Your First Post</a>
+                <a href="{% url 'blog:project_create' %}" class="btn btn-primary">Create Your First Project</a>
+            </div>
             {% endif %}
         </div>
         {% endif %}
