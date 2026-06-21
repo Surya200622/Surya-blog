@@ -62,11 +62,7 @@
                 <li><a href="{% url 'blog:project_list' %}" class="navbar__link {% if 'projects' in request.path %}active{% endif %}" id="nav-portfolio">Portfolio</a></li>
                 <li><a href="{% url 'blog:post_list' %}" class="navbar__link {% if 'blog' in request.path and 'projects' not in request.path %}active{% endif %}" id="nav-blog">Blog</a></li>
                 <li><a href="{% url 'pages:home' %}#services" class="navbar__link" id="nav-services">Services</a></li>
-                {% if user.is_authenticated %}
-                <li><a href="{% url 'dashboard:home' %}" class="navbar__link {% if 'dashboard' in request.path %}active{% endif %}">Client Portal</a></li>
-                {% else %}
-                <li><a href="{% url 'accounts:login' %}" class="navbar__link {% if 'login' in request.path %}active{% endif %}">Client Portal</a></li>
-                {% endif %}
+                <li><a href="{% url 'pages:contact' %}" class="navbar__link {% if 'contact' in request.path %}active{% endif %}">Contact</a></li>
             </ul>
 
             <div class="navbar__actions" style="display: flex; align-items: center; gap: 1rem;">
