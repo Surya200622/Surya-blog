@@ -118,13 +118,17 @@
 }
 
 .card-glass {
-    background: var(--bg-card);
+    background: var(--bg-glass);
     backdrop-filter: blur(var(--glass-blur));
     -webkit-backdrop-filter: blur(var(--glass-blur));
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-xl);
     padding: var(--space-8);
-    box-shadow: var(--shadow-card);
+    box-shadow: none;
+    transition: border-color var(--transition-base);
+}
+.card-glass:hover {
+    border-color: var(--accent);
 }
 
 .card-flat {
