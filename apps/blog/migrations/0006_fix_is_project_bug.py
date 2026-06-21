@@ -3,6 +3,22 @@
 from django.db import migrations
 
 
+from django.db.models import Q
+
+def fix_projects(apps, schema_editor):
+    Post = apps.get_model('blog', 'Post')
+    
+    # Reset all to False first
+    Post.objects.all().update(is_project=False)
+    
+    # Correctly set to True based on precise criteria
+    Post.objects.filter(category__slug='portfolio').update(is_project=True)
+    Post.objects.exclude(Q(project_live_url__isnull=True) | Q(project_live_url='')).update(is_project=True)
+    Post.objects.exclude(Q(project_price__isnull=True) | Q(project_price='')).update(is_project=True)
+
+def reverse_fix(apps, schema_editor):
+    pass
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -10,4 +26,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RunPython(fix_projects, reverse_fix),
     ]
