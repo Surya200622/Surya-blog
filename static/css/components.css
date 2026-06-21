@@ -680,7 +680,11 @@ select.form-input {
 
 @media (max-width: 768px) {
     .footer__grid { grid-template-columns: 1fr 1fr; }
-    .footer__bottom { flex-direction: column; gap: var(--space-4); }
+    .footer__bottom { flex-direction: column; gap: var(--space-4); text-align: center; }
+}
+
+@media (max-width: 576px) {
+    .footer__grid { grid-template-columns: 1fr; gap: var(--space-8); }
 }
 
 /* ── Alerts / Messages ── */

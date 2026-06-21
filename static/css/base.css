@@ -268,6 +268,13 @@ code {
 .gap-6 { gap: var(--space-6); }
 .gap-8 { gap: var(--space-8); }
 
+.page-layout-sidebar {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 3rem;
+    align-items: start;
+}
+
 /* ── Utility ── */
 .text-center { text-align: center; }
 .text-gradient {
@@ -300,6 +307,7 @@ code {
 @media (max-width: 1024px) {
     .grid-4 { grid-template-columns: repeat(2, 1fr); }
     .grid-3 { grid-template-columns: repeat(2, 1fr); }
+    .page-layout-sidebar { grid-template-columns: 1fr; }
     h1 { font-size: var(--text-4xl); }
     h2 { font-size: var(--text-3xl); }
 }
@@ -311,4 +319,22 @@ code {
     .container { padding: 0 var(--space-4); }
     .section { padding: var(--space-16) 0; }
     .hide-mobile { display: none !important; }
+}
+
+@media (max-width: 480px) {
+    .btn-lg {
+        padding: var(--space-3) var(--space-6);
+        font-size: var(--text-base);
+        width: 100%;
+    }
+    .stats-section {
+        justify-content: center;
+        gap: var(--space-4) !important;
+    }
+    .stats-section > div {
+        text-align: center !important;
+        flex: 1 1 100%;
+        margin-bottom: var(--space-2);
+    }
+    h1 { font-size: clamp(2.5rem, 8vw, 3rem) !important; }
 }
