@@ -66,11 +66,12 @@ class PostDetailView(View):
     """Display a single blog post with comments."""
 
     def get(self, request, slug):
-        post = get_object_or_404(
-            Post.objects.select_related('author', 'category'),
-            slug=slug,
-            status='published',
-        )
+        queryset = Post.objects.select_related('author', 'category')
+        post_obj = queryset.filter(slug=slug).first()
+        if not (request.user.is_authenticated and post_obj and (request.user.is_superuser or request.user == post_obj.author)):
+            queryset = queryset.filter(status='published')
+        
+        post = get_object_or_404(queryset, slug=slug)
 
         # Increment view count
         post.increment_views()
