@@ -118,19 +118,13 @@
 }
 
 .card-glass {
-    background: var(--glass-bg);
+    background: var(--bg-card);
     backdrop-filter: blur(var(--glass-blur));
     -webkit-backdrop-filter: blur(var(--glass-blur));
-    border: 1px solid var(--border-color);
+    border: 1px solid var(--border-subtle);
     border-radius: var(--radius-xl);
-    padding: var(--space-6);
-    transition: all var(--transition-base);
-}
-.card-glass:hover {
-    background: var(--bg-glass-hover);
-    border-color: var(--accent);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-glow);
+    padding: var(--space-8);
+    box-shadow: var(--shadow-card);
 }
 
 .card-flat {

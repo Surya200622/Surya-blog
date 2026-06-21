@@ -8,7 +8,7 @@
             <p style="font-size: var(--text-lg);">We'd love to hear from you. Drop us a message!</p>
         </div>
 
-        <div class="card-glass" style="padding: var(--space-8);" id="form-wrapper">
+        <div class="card-glass" style="max-width: 600px; margin: 0 auto; padding: var(--space-10);" id="form-wrapper">
             <form hx-post="{% url 'pages:contact' %}" hx-target="#form-wrapper" hx-swap="innerHTML" id="contact-form">
                 {% csrf_token %}
                 <div class="form-group">
