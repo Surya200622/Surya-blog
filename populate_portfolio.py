@@ -87,7 +87,8 @@ def populate():
                 'category': portfolio_cat,
                 'status': 'published',
                 'published_at': timezone.now(),
-                'reading_time': 2
+                'reading_time': 2,
+                'project_live_url': 'https://example.com/project'
             }
         )
         for t in p['tags']:
