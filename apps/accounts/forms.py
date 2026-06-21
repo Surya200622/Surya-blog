@@ -99,10 +99,11 @@ class UserUpdateForm(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ['first_name', 'last_name', 'bio', 'phone', 'website', 'avatar']
+        fields = ['first_name', 'last_name', 'email', 'bio', 'phone', 'website', 'avatar']
         widgets = {
             'first_name': forms.TextInput(attrs={'class': 'form-input'}),
             'last_name': forms.TextInput(attrs={'class': 'form-input'}),
+            'email': forms.EmailInput(attrs={'class': 'form-input'}),
             'bio': forms.Textarea(attrs={'class': 'form-input', 'rows': 4, 'placeholder': 'Tell us about yourself...'}),
             'phone': forms.TextInput(attrs={'class': 'form-input', 'placeholder': '+91 ...'}),
             'website': forms.URLInput(attrs={'class': 'form-input', 'placeholder': 'https://...'}),
