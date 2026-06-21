@@ -5,6 +5,44 @@
 {% block body_class %}page-home{% endblock %}
 
 {% block content %}
+<style>
+    @media (max-width: 1024px) {
+        .hero-grid {
+            display: flex !important;
+            flex-direction: column;
+            gap: 2rem !important;
+            padding-top: 2rem;
+        }
+        .hero-text {
+            order: 2;
+            text-align: center !important;
+        }
+        .hero-image {
+            order: 1;
+        }
+        .hero-image img {
+            max-width: 200px !important;
+            margin: 0 auto;
+        }
+        .hero-stats {
+            justify-content: center !important;
+            margin-top: 2rem !important;
+        }
+        .hero-stats > div {
+            text-align: center !important;
+        }
+        .hero-buttons {
+            justify-content: center !important;
+        }
+        .hero-text h1 {
+            font-size: 2.5rem !important;
+        }
+        .hero-text p {
+            margin: 0 auto 1.5rem auto !important;
+        }
+    }
+</style>
+
 <!-- Hero Section -->
 <section class="hero-section" style="background: var(--gradient-hero); min-height: 90vh; display: flex; align-items: center; position: relative; overflow: hidden;">
     <!-- Decorative orbs -->
@@ -14,7 +52,7 @@
     <div class="container" style="position: relative; z-index: 1;">
         <div class="hero-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 4rem; align-items: center; max-width: 1200px; margin: 0 auto;">
             <!-- Text Content -->
-            <div style="text-align: left;">
+            <div class="hero-text" style="text-align: left;">
                 <div class="animate-on-scroll" style="margin-bottom: var(--space-6);">
                     <span class="badge badge-primary" style="font-size: var(--text-sm); padding: var(--space-2) var(--space-5);">
                         🚀 Full-Stack Python Developer
@@ -30,7 +68,7 @@
                     Hi, I'm Surya CS. I specialize in Django and React to build modern, blazing-fast web solutions from Coimbatore, India.
                 </p>
 
-                <div class="animate-on-scroll flex" style="flex-wrap: wrap; gap: 1rem;">
+                <div class="animate-on-scroll flex hero-buttons" style="flex-wrap: wrap; gap: 1rem;">
                     <a href="#portfolio" class="btn btn-gradient btn-lg">
                         View My Work →
                     </a>
@@ -40,7 +78,7 @@
                 </div>
 
                 <!-- Stats bar -->
-                <div class="animate-on-scroll stats-section" style="display: flex; gap: var(--space-8); margin-top: var(--space-12); flex-wrap: wrap;">
+                <div class="animate-on-scroll stats-section hero-stats" style="display: flex; gap: var(--space-8); margin-top: var(--space-12); flex-wrap: wrap;">
                     <div style="text-align: left;">
                         <div style="font-family: var(--font-display); font-size: var(--text-3xl); font-weight: 800; color: var(--text-primary);" data-counter="3">0</div>
                         <div style="font-size: var(--text-sm); color: var(--text-tertiary);">Projects</div>
@@ -57,7 +95,7 @@
             </div>
 
             <!-- Image Content -->
-            <div class="animate-on-scroll" style="position: relative; text-align: center;">
+            <div class="animate-on-scroll hero-image" style="position: relative; text-align: center;">
                 <div style="position: relative; display: inline-block; border-radius: 2rem; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.3); border: 2px solid rgba(255,255,255,0.1);">
                     <img src="{% static 'images/surya-cinematic.jpg' %}" alt="Surya CS" style="width: 100%; max-width: 500px; height: auto; object-fit: cover; display: block;">
                 </div>
