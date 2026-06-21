@@ -82,14 +82,10 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = [
-            'headline', 'skills', 'hourly_rate', 'portfolio_url',
             'github_url', 'linkedin_url', 'twitter_url',
             'is_available', 'location',
         ]
         widgets = {
-            'headline': forms.TextInput(attrs={'class': 'form-input', 'placeholder': 'e.g. Full-Stack Developer'}),
-            'hourly_rate': forms.NumberInput(attrs={'class': 'form-input', 'placeholder': '500'}),
-            'portfolio_url': forms.URLInput(attrs={'class': 'form-input', 'placeholder': 'https://...'}),
             'github_url': forms.URLInput(attrs={'class': 'form-input', 'placeholder': 'https://github.com/...'}),
             'linkedin_url': forms.URLInput(attrs={'class': 'form-input', 'placeholder': 'https://linkedin.com/in/...'}),
             'twitter_url': forms.URLInput(attrs={'class': 'form-input', 'placeholder': 'https://x.com/...'}),

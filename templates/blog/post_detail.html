@@ -148,6 +148,21 @@
                     <span style="color: var(--text-tertiary); font-size: 0.9rem; display: block; text-transform: uppercase; letter-spacing: 1px;">Pricing</span>
                     <strong style="color: var(--accent); font-size: 1.5rem;">{{ post.project_price }}</strong>
                 </div>
+
+                <button onclick="document.getElementById('qr-payment-section').style.display='block'" class="btn btn-gradient" style="width: 100%; display: flex; justify-content: center; padding: 1rem; border-radius: 1rem; margin-bottom: 1rem;">
+                    Buy Now
+                </button>
+                
+                <div id="qr-payment-section" style="display: none; background: var(--bg-tertiary); padding: 1.5rem; border-radius: 1rem; text-align: center; margin-bottom: 1.5rem; border: 1px solid var(--border-color);">
+                    <h5 style="margin-bottom: 1rem;">Scan to Pay</h5>
+                    <img src="/static/images/gpay-qr.jpeg" alt="Google Pay QR Code" style="width: 100%; max-width: 200px; border-radius: 0.5rem; margin-bottom: 1rem;">
+                    <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">After payment, please enter your Transaction ID below to confirm.</p>
+                    
+                    <form onsubmit="event.preventDefault(); alert('Payment confirmation submitted! We will verify your transaction shortly.'); document.getElementById('qr-payment-section').style.display='none';" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <input type="text" name="transaction_id" placeholder="Transaction ID" required style="padding: 0.75rem; border-radius: 0.5rem; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-primary);">
+                        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Confirm Payment</button>
+                    </form>
+                </div>
                 {% endif %}
                 
                 {% if post.project_live_url %}

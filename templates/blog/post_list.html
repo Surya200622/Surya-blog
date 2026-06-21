@@ -9,7 +9,7 @@
             <p style="font-size: var(--text-lg);">Explore articles on tech, design, and more.</p>
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) 250px; gap: 3rem; align-items: start;">
+        <div style="display: grid; grid-template-columns: 1fr 300px; gap: 3rem; align-items: start;">
             <div style="min-width: 0;">
 
         <!-- Search -->
@@ -31,7 +31,7 @@
 
         <!-- Posts Grid -->
         {% if posts %}
-        <div class="grid grid-3 stagger-children" id="post-grid">
+        <div class="grid grid-2 stagger-children" id="post-grid">
             {% include 'blog/partials/post_list_items.html' %}
         </div>
         {% else %}

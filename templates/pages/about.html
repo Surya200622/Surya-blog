@@ -4,38 +4,50 @@
 <section class="section">
     <div class="container-sm page-enter">
         <div class="text-center mb-8">
-            <h1>About <span class="text-gradient">BlogCraft</span></h1>
+            <h1>About <span class="text-gradient">Me</span></h1>
             <p style="font-size: var(--text-lg); max-width: 600px; margin: var(--space-4) auto 0;">
-                We're building the future of content creation and freelancing — one post at a time.
+                Full-Stack Python Developer | Creating beautiful digital experiences.
             </p>
         </div>
 
         <div class="card-glass" style="padding: var(--space-10);">
-            <h3 style="margin-bottom: var(--space-4);">Our Mission</h3>
-            <p>BlogCraft is a premium platform that brings together writers, developers, designers, and clients in one beautiful space. Whether you're sharing knowledge through blog posts or building your freelance career, we provide the tools you need to succeed.</p>
+            <div class="flex gap-8" style="align-items: center; flex-wrap: wrap; margin-bottom: var(--space-8);">
+                <img src="/static/images/surya-cinematic.jpg" alt="Surya CS" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 4px solid rgba(255,255,255,0.1);">
+                <div style="flex: 1; min-width: 250px;">
+                    <h2 style="margin-bottom: var(--space-2);">Hi, I'm Surya CS 👋</h2>
+                    <p class="text-muted" style="font-size: var(--text-lg);">Based in Coimbatore, India.</p>
+                </div>
+            </div>
 
-            <h3 style="margin-top: var(--space-8); margin-bottom: var(--space-4);">What We Offer</h3>
+            <h3 style="margin-bottom: var(--space-4);">My Journey</h3>
+            <p>I'm a passionate Full-Stack Developer specializing in Django and React. I love turning complex problems into simple, beautiful, and intuitive designs. Over the years, I have built multiple web solutions and honed my skills in modern web technologies.</p>
+
+            <h3 style="margin-top: var(--space-8); margin-bottom: var(--space-4);">What I Do</h3>
             <div class="grid grid-2 gap-6" style="margin-top: var(--space-6);">
                 <div class="card animate-on-scroll">
-                    <div style="font-size: var(--text-3xl); margin-bottom: var(--space-3);">📝</div>
-                    <h4>Blog CMS</h4>
-                    <p class="text-sm mt-2">A powerful, rich-text editor for creating stunning blog posts with SEO optimization built-in.</p>
+                    <div style="font-size: var(--text-3xl); margin-bottom: var(--space-3);">💻</div>
+                    <h4>Frontend Development</h4>
+                    <p class="text-sm mt-2">Building responsive, animated, and cinematic UI/UX using React, TailwindCSS, and Vanilla Javascript.</p>
                 </div>
                 <div class="card animate-on-scroll">
-                    <div style="font-size: var(--text-3xl); margin-bottom: var(--space-3);">💼</div>
-                    <h4>Freelance Marketplace</h4>
-                    <p class="text-sm mt-2">Post projects, submit bids, manage milestones, and get paid securely through Razorpay.</p>
+                    <div style="font-size: var(--text-3xl); margin-bottom: var(--space-3);">⚙️</div>
+                    <h4>Backend Architecture</h4>
+                    <p class="text-sm mt-2">Designing scalable APIs and robust web architectures using Python and Django.</p>
                 </div>
                 <div class="card animate-on-scroll">
-                    <div style="font-size: var(--text-3xl); margin-bottom: var(--space-3);">📊</div>
-                    <h4>Analytics Dashboard</h4>
-                    <p class="text-sm mt-2">Track your content performance, earnings, and engagement with a beautiful analytics panel.</p>
+                    <div style="font-size: var(--text-3xl); margin-bottom: var(--space-3);">🚀</div>
+                    <h4>Performance Optimization</h4>
+                    <p class="text-sm mt-2">Ensuring apps load lightning fast and provide a smooth user experience.</p>
                 </div>
                 <div class="card animate-on-scroll">
-                    <div style="font-size: var(--text-3xl); margin-bottom: var(--space-3);">🔒</div>
-                    <h4>Enterprise Security</h4>
-                    <p class="text-sm mt-2">Built with Django's battle-tested security, brute-force protection, and encrypted payments.</p>
+                    <div style="font-size: var(--text-3xl); margin-bottom: var(--space-3);">🎨</div>
+                    <h4>Creative Web Design</h4>
+                    <p class="text-sm mt-2">Crafting premium designs that wow clients and users.</p>
                 </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: var(--space-12);">
+                <a href="{% url 'pages:contact' %}" class="btn btn-gradient btn-lg">Get In Touch</a>
             </div>
         </div>
     </div>
