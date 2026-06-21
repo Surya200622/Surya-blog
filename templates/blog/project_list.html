@@ -9,12 +9,7 @@
         </p>
     </header>
 
-    <div class="grid grid-3">
-        {% for post in posts %}
-        <article class="post-card" style="border: 1px solid var(--border-color); border-radius: var(--radius-xl); overflow: hidden; background: var(--bg-secondary); transition: transform 0.2s;">
-            <a href="{{ post.get_absolute_url }}" style="display: block; text-decoration: none; color: inherit;">
-                <div style="position: relative; height: 250px;">
-                    {% if post.featured_image %}
+
     <!-- Main Layout -->
     <div style="display: grid; grid-template-columns: 1fr 300px; gap: 3rem; align-items: start;">
         <div>
