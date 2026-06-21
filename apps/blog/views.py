@@ -16,7 +16,7 @@ class PostListView(View):
     """Display paginated list of published blog posts."""
 
     def get(self, request):
-        posts = Post.objects.filter(status='published').select_related('author', 'category')
+        posts = Post.objects.filter(status='published', is_project=False).select_related('author', 'category')
         featured_posts = posts.filter(is_featured=True)[:3]
         categories = Category.objects.all()
         tags = Tag.objects.all()
@@ -43,14 +43,14 @@ class ProjectListView(View):
     """Display paginated list of portfolio projects."""
 
     def get(self, request):
-        posts = Post.objects.filter(status='published').exclude(project_live_url='').select_related('author', 'category')
+        posts = Post.objects.filter(status='published', is_project=True).select_related('author', 'category')
         categories = Category.objects.all()
 
         paginator = Paginator(posts, 9)
         page = request.GET.get('page', 1)
         posts_page = paginator.get_page(page)
 
-        trending_projects = Post.objects.filter(status='published').exclude(project_live_url='').order_by('-views_count')[:3]
+        trending_projects = Post.objects.filter(status='published', is_project=True).order_by('-views_count')[:3]
 
         context = {
             'posts': posts_page,

@@ -138,6 +138,7 @@ class Post(models.Model):
     )
     is_premium = models.BooleanField(default=False, verbose_name='Premium Content')
     is_featured = models.BooleanField(default=False, verbose_name='Featured Post')
+    is_project = models.BooleanField(default=False, verbose_name='Is Portfolio Project')
 
     # Metrics
     views_count = models.PositiveIntegerField(default=0)

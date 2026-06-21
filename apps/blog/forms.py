@@ -129,6 +129,10 @@ class ProjectForm(PostForm):
             }),
         }
 
+    def save(self, commit=True):
+        self.instance.is_project = True
+        return super().save(commit=commit)
+
 
 class CommentForm(forms.ModelForm):
     """Form for blog post comments."""
