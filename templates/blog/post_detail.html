@@ -155,13 +155,54 @@
                 
                 <div id="qr-payment-section" style="display: none; background: var(--bg-tertiary); padding: 1.5rem; border-radius: 1rem; text-align: center; margin-bottom: 1.5rem; border: 1px solid var(--border-color);">
                     <h5 style="margin-bottom: 1rem;">Scan to Pay</h5>
-                    <img src="/static/images/gpay-qr.jpeg" alt="Google Pay QR Code" style="width: 100%; max-width: 200px; border-radius: 0.5rem; margin-bottom: 1rem;">
+                    
+                    <div style="background: white; padding: 1rem; border-radius: 0.5rem; display: inline-block; margin-bottom: 1rem;">
+                        <img id="dynamic-qr-code" src="" alt="UPI QR Code" style="width: 100%; max-width: 200px; display: block;">
+                    </div>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <button onclick="handleContinueToPay()" type="button" class="btn btn-secondary" style="width: 100%; justify-content: center; margin-bottom: 0.5rem; border: 1px solid var(--border-color);">Pay via UPI App</button>
+                        <p style="font-size: 0.85rem; color: var(--text-secondary);">Or scan the QR code above</p>
+                    </div>
+
                     <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">After payment, please enter your Transaction ID below to confirm.</p>
                     
                     <form onsubmit="event.preventDefault(); alert('Payment confirmation submitted! We will verify your transaction shortly.'); document.getElementById('qr-payment-section').style.display='none';" style="display: flex; flex-direction: column; gap: 0.5rem;">
                         <input type="text" name="transaction_id" placeholder="Transaction ID" required style="padding: 0.75rem; border-radius: 0.5rem; border: 1px solid var(--border-color); background: var(--bg-primary); color: var(--text-primary);">
                         <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Confirm Payment</button>
                     </form>
+
+                    <script>
+                        function generatePaymentDetails() {
+                            const upiId = 'cssurya2006@okicici';
+                            const payeeName = 'C.S. SURYA';
+                            const projectName = "{{ post.title|escapejs }}";
+                            const rawPrice = "{{ post.project_price|escapejs }}";
+                            
+                            // Extract numbers from price string
+                            const priceMatch = rawPrice.match(/\d+(?:,\d+)*(?:\.\d+)?/);
+                            const payAmount = priceMatch ? priceMatch[0].replace(/,/g, '') : '0';
+                            
+                            const note = `Payment for ${projectName}`;
+                            const upiUrl = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${payAmount}&cu=INR&tn=${encodeURIComponent(note)}`;
+                            const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(upiUrl)}`;
+                            
+                            const qrImg = document.getElementById('dynamic-qr-code');
+                            if (qrImg) qrImg.src = qrCodeUrl;
+                            window.currentUpiUrl = upiUrl;
+                        }
+
+                        function handleContinueToPay() {
+                            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                            if (isMobile && window.currentUpiUrl) {
+                                window.location.href = window.currentUpiUrl;
+                            } else {
+                                alert("Please scan the QR code using any UPI app on your phone.");
+                            }
+                        }
+
+                        document.addEventListener('DOMContentLoaded', generatePaymentDetails);
+                    </script>
                 </div>
                 {% endif %}
                 
