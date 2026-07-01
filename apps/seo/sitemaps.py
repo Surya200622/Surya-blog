@@ -8,7 +8,7 @@ class PostSitemap(Sitemap):
     priority = 0.8
 
     def items(self):
-        return Post.objects.filter(status='published')
+        return Post.objects.filter(status='published').prefetch_related('tags')
 
     def lastmod(self, obj):
         return obj.updated_at

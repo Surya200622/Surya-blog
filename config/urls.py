@@ -20,9 +20,25 @@ def custom_sitemap(request, sitemaps, **kwargs):
     if hasattr(response, 'render'):
         response.render()
         content = response.content.decode('utf-8')
-        content = content.replace('example.com', 'blogcraft.pythonanywhere.com')
+        domain = request.build_absolute_uri('/')[:-1]
+        content = content.replace('http://example.com', domain).replace('https://example.com', domain)
         response.content = content.encode('utf-8')
     return response
+
+from django.http import HttpResponse
+
+def robots_txt(request):
+    lines = [
+        "User-agent: *",
+        "Disallow: /admin/",
+        "Disallow: /accounts/",
+        "Disallow: /dashboard/",
+        "Disallow: /payments/",
+        "Allow: /",
+        "",
+        f"Sitemap: {request.build_absolute_uri('/')[:-1]}/sitemap.xml",
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")
 
 urlpatterns = [
     # Admin
@@ -51,8 +67,8 @@ urlpatterns = [
     path('ckeditor5/', include('django_ckeditor_5.urls')),
 
     # SEO
-    path('sitemap.xml', custom_sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
-    path('robots.txt', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
+    path('sitemap.xml', custom_sitemap, {'sitemaps': sitemaps, 'template_name': 'sitemap.xml'}, name='django.contrib.sitemaps.views.sitemap'),
+    path('robots.txt', robots_txt, name='robots_txt'),
 
     # Pages (home, about, contact) — keep last for catch-all
     path('', include('apps.pages.urls')),

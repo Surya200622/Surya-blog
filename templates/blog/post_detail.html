@@ -16,6 +16,7 @@
 {% block og_title %}{{ post.seo_title }}{% endblock %}
 {% block og_description %}{{ post.seo_description }}{% endblock %}
 {% block meta_description %}{{ post.seo_description }}{% endblock %}
+{% block meta_keywords %}{% if post.tags.all %}{% for tag in post.tags.all %}{{ tag.name }}{% if not forloop.last %}, {% endif %}{% endfor %}{% else %}{{ block.super }}{% endif %}{% endblock %}
 {% block og_image %}{% if post.featured_image %}{{ request.scheme }}://{{ request.get_host }}{{ post.featured_image.url }}{% endif %}{% endblock %}
 {% block twitter_image %}{% if post.featured_image %}{{ request.scheme }}://{{ request.get_host }}{{ post.featured_image.url }}{% endif %}{% endblock %}
 
