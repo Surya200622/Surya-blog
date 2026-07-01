@@ -6,12 +6,14 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
-from apps.seo.sitemaps import PostSitemap, CategorySitemap, StaticViewSitemap
+from django.views.generic import TemplateView
+from apps.seo.sitemaps import PostSitemap, CategorySitemap, StaticViewSitemap, ProjectSitemap
 
 sitemaps = {
     'posts': PostSitemap,
     'categories': CategorySitemap,
     'static': StaticViewSitemap,
+    'projects': ProjectSitemap,
 }
 
 urlpatterns = [
@@ -42,6 +44,7 @@ urlpatterns = [
 
     # SEO
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path('robots.txt', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
 
     # Pages (home, about, contact) — keep last for catch-all
     path('', include('apps.pages.urls')),

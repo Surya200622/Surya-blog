@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /accounts/
+Disallow: /dashboard/
+Disallow: /payments/
+Allow: /
+
+Sitemap: https://blogcraft.pythonanywhere.com/sitemap.xml

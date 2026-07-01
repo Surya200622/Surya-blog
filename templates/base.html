@@ -7,15 +7,26 @@
     <title>{% block title %}{{ page_title|default:"Home" }}{% endblock %} — {{ site_name }}</title>
     <meta name="description" content="{% block meta_description %}{{ meta_description|default:"BlogCraft — A premium blog and freelance platform." }}{% endblock %}">
 
+    <!-- Google Search Console Verification -->
+    <meta name="google-site-verification" content="{% block google_verification %}nHvozI1yFLOnNMJvIAri4JULsxvwg80wm-CteULuSYw{% endblock %}">
+
+    <!-- SEO Meta -->
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta name="author" content="{{ site_name }}">
+    <meta name="keywords" content="{% block meta_keywords %}blog, freelance, portfolio, tech{% endblock %}">
+
     <!-- Open Graph -->
     <meta property="og:title" content="{% block og_title %}{{ page_title|default:"Home" }} — {{ site_name }}{% endblock %}">
     <meta property="og:description" content="{% block og_description %}{{ meta_description|default:"BlogCraft — A premium blog and freelance platform." }}{% endblock %}">
     <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
     <meta property="og:site_name" content="{{ site_name }}">
     <meta property="og:image" content="{% block og_image %}{% endblock %}">
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}{{ page_title|default:"Home" }} — {{ site_name }}{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}{{ meta_description|default:"BlogCraft — A premium blog and freelance platform." }}{% endblock %}">
     <meta name="twitter:image" content="{% block twitter_image %}{% endblock %}">
 
     <!-- Canonical -->
