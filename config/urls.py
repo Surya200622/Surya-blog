@@ -7,14 +7,22 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
 from django.views.generic import TemplateView
-from apps.seo.sitemaps import PostSitemap, CategorySitemap, StaticViewSitemap, ProjectSitemap
+from apps.seo.sitemaps import PostSitemap, CategorySitemap, StaticViewSitemap
 
 sitemaps = {
     'posts': PostSitemap,
     'categories': CategorySitemap,
     'static': StaticViewSitemap,
-    'projects': ProjectSitemap,
 }
+
+def custom_sitemap(request, sitemaps, **kwargs):
+    response = sitemap(request, sitemaps, **kwargs)
+    if hasattr(response, 'render'):
+        response.render()
+        content = response.content.decode('utf-8')
+        content = content.replace('example.com', 'blogcraft.pythonanywhere.com')
+        response.content = content.encode('utf-8')
+    return response
 
 urlpatterns = [
     # Admin
@@ -43,7 +51,7 @@ urlpatterns = [
     path('ckeditor5/', include('django_ckeditor_5.urls')),
 
     # SEO
-    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path('sitemap.xml', custom_sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('robots.txt', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
 
     # Pages (home, about, contact) — keep last for catch-all
